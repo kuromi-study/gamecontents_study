@@ -1,0 +1,12 @@
+uint,uint,string,#
+ID,COUNT,STRINGKEY,DESCRIPTION
+1,1,pass_mission_001,로그인
+2,5,pass_mission_002,게임플레이
+3,5,pass_mission_003,뽑기
+4,5,pass_mission_004,강화성공
+5,5,pass_mission_005,강화실패
+6,4,pass_mission_006,아이템구매
+7,4,pass_mission_007,아이템판매
+8,100000,pass_mission_008,골드소모
+9,10000,pass_mission_009,다이아소모
+10,9,pass_mission_010,미션완료
