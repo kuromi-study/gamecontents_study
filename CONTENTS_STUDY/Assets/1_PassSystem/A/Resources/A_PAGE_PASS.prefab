@@ -2735,9 +2735,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _backBtn: {fileID: 6066462946625418051}
+  _backBtnText: {fileID: 6066462946993060035}
   _infoBtn: {fileID: 6066462948367213038}
-  _remainTime: {fileID: 6066462947873801086}
+  _remainTimeText: {fileID: 6066462947873801086}
   _purchaseBtn: {fileID: 6066462946624291929}
+  _purchaseBtnText: {fileID: 6066462947101839027}
   _rewardPrefab: {fileID: 4313660345162823378, guid: 42f771fe3a9c9884ebf3483cf2cbe9fb, type: 3}
   _missionPrefab: {fileID: 4313660345162823378, guid: 877136d60948db0469852e84d88ebf54, type: 3}
   _lastReward: {fileID: 6066462947726792910}
