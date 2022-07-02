@@ -1,11 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
 public class A_PAGE_PASS : MonoBehaviour
 {
+    enum tabType
+    {
+        NONE,
+        PASS,
+        MISSION,
+    };
+
     [Header("상단 오브젝트")]
     [SerializeField] Button _backBtn;
     [SerializeField] Text _backBtnText;
@@ -13,12 +21,22 @@ public class A_PAGE_PASS : MonoBehaviour
     [SerializeField] Text _remainTimeText;
     [SerializeField] Button _purchaseBtn;
     [SerializeField] Text _purchaseBtnText;
+    [SerializeField] Toggle _passTab;
+    [SerializeField] Toggle _missionTab;
 
     [Header("리스트 오브젝트")]
     [SerializeField] GameObject _rewardPrefab;
     [SerializeField] GameObject _missionPrefab;
     [SerializeField] GameObject _lastReward;
     [SerializeField] GameObject _scrollView;
+
+    tabType _tabType = tabType.PASS;
+
+    [Header("지역변수")]
+    int _seasonID;
+
+    [Header("const변수용")]
+    readonly int PASS_MISSION_TYPE = 2;
 
     static GameObject _thispage;
 
@@ -50,18 +68,56 @@ public class A_PAGE_PASS : MonoBehaviour
     {
         _backBtn?.onClick.RemoveAllListeners();
         _infoBtn?.onClick.RemoveAllListeners();
+        _passTab?.onValueChanged.RemoveAllListeners();
+        _missionTab?.onValueChanged.RemoveAllListeners();
     }
 
     void InitPage()
     {
         AddBtnListner();
-        RefreshTopLayer();
+        SetSeason();
+        Refresh();
     }
 
     void AddBtnListner()
     {
         _backBtn?.onClick.AddListener(OnClickClose);
         _infoBtn?.onClick.AddListener(OnClickInfo);
+
+        _passTab?.onValueChanged.AddListener((set) =>
+        {
+            if(set == true)
+            {
+                _tabType = tabType.PASS;
+                RefreshScroll(_tabType);
+            }
+        });
+
+        _missionTab?.onValueChanged.AddListener((set) =>
+        {
+            if (set == true)
+            {
+                _tabType = tabType.MISSION;
+                RefreshScroll(_tabType);
+            }
+        });
+    }
+
+    void SetSeason()
+    {
+        // 데이터뒤져서 현재시간에 맞는 시즌id를 가져와야한다.
+
+        var passmain = ExcelParser.Read("PASS_TABLE-PASSMAIN");
+
+        // rewardList 뽑아오기
+        _seasonID = 2;
+    }
+
+    void Refresh()
+    {
+        RefreshTopLayer();
+        RefreshScroll(_tabType);
+        RefreshBottomLayer();
     }
 
     void RefreshTopLayer()
@@ -76,6 +132,63 @@ public class A_PAGE_PASS : MonoBehaviour
         }
 
         _purchaseBtnText.SetTextWithStringKey("ui_pass_003");
+    }
+
+    void RefreshScroll(tabType type)
+    {
+        ResetScroll();
+        switch (type)
+        {
+            case tabType.PASS:
+                RefreshScrollPass();
+                break;
+            case tabType.MISSION:
+                RefreshScrollMission();
+                break;
+            case tabType.NONE:
+                Debug.LogError($"CHECK TYPE {type.ToString()}");
+                break;
+        }
+    }
+
+    void RefreshScrollPass()
+    {
+        var passreward = ExcelParser.Read("PASS_TABLE-PASSREWARD");
+        var rewardList = passreward.Values.Where(x => int.Parse(x["PASSMAIN_ID"].ToString()) == _seasonID).ToList();
+
+        foreach (var it in rewardList)
+        {
+            var passItem = Resources.Load<GameObject>("A_PAGE_PASS_PASSITEM");
+            var passItemGO = Instantiate<GameObject>(passItem);
+            passItemGO.transform.SetParent(_scrollView.transform);
+        }
+    }
+
+    void RefreshScrollMission()
+    {
+        var passreward = ExcelParser.Read("MISSION_TABLE-MISSIONMAIN");
+        var rewardList = passreward.Values.Where(x => int.Parse(x["TYPE"].ToString()) == PASS_MISSION_TYPE).ToList();
+
+        foreach (var it in rewardList)
+        {
+            var missionItem = Resources.Load<GameObject>("A_PAGE_PASS_MISSIONITEM");
+            var missionItemGO = Instantiate<GameObject>(missionItem);
+            missionItemGO.transform.SetParent(_scrollView.transform);
+        }
+    }
+
+    void ResetScroll()
+    {
+        var childCount = _scrollView.transform.childCount;
+        for(int i = 0; i<childCount; i++)
+        {
+            Destroy(_scrollView.transform.GetChild(i).gameObject);
+        }
+    }
+
+    void RefreshBottomLayer()
+    {
+
     }
 
     #region 버튼 리스너 처리

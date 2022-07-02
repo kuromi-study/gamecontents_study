@@ -2740,6 +2740,8 @@ MonoBehaviour:
   _remainTimeText: {fileID: 6066462947873801086}
   _purchaseBtn: {fileID: 6066462946624291929}
   _purchaseBtnText: {fileID: 6066462947101839027}
+  _passTab: {fileID: 6066462947948219218}
+  _missionTab: {fileID: 6066462947034075137}
   _rewardPrefab: {fileID: 4313660345162823378, guid: 42f771fe3a9c9884ebf3483cf2cbe9fb, type: 3}
   _missionPrefab: {fileID: 4313660345162823378, guid: 877136d60948db0469852e84d88ebf54, type: 3}
   _lastReward: {fileID: 6066462947726792910}
