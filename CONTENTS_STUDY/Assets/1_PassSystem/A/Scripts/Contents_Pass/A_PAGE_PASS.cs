@@ -140,9 +140,11 @@ public class A_PAGE_PASS : MonoBehaviour
         switch (type)
         {
             case tabType.PASS:
+                _lastReward.SetActive(true);
                 RefreshScrollPass();
                 break;
             case tabType.MISSION:
+                _lastReward.SetActive(false);
                 RefreshScrollMission();
                 break;
             case tabType.NONE:
