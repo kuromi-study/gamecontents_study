@@ -19,6 +19,9 @@ public class PacketManager : MonoSingleton<PacketManager>
         }
 
         // 받은 패스포인트 처리할것.
+
+        // A -- Myinfo에 받아온 패스정보 저장
+        A_PassInfo.Instance.SetPassInfo(passpoint);
     }
 
     // 패스 달성 패킷
