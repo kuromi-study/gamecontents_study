@@ -1,0 +1,31 @@
+string,string
+KEY,DESCRIPTION
+ui_pass_001,뒤로가기
+ui_pass_002,{0}{1} 남음
+ui_pass_003,패스구매하기
+ui_pass_004,레벨
+ui_pass_005,Lv.{0}
+ui_pass_006,{0} / {1}
+ui_pass_007,모두받기
+ui_pass_008,{0}회 남음
+ui_pass_009,아이템 획득!
+ui_pass_010,{0}다이아를 사용하여 {1}레벨을 달성합니다.
+ui_pass_011,취소
+ui_pass_012,확인
+ui_pass_013,{0}다이아를 사용하여 패스를 활성화합니다.
+pass_mission_001,로그인
+pass_mission_002,게임플레이
+pass_mission_003,뽑기
+pass_mission_004,강화성공
+pass_mission_005,강화실패
+pass_mission_006,아이템구매
+pass_mission_007,아이템판매
+pass_mission_008,골드소모
+pass_mission_009,다이아소모
+pass_mission_010,미션완료
+pass_description_001,1차 패스
+pass_description_002,2차 패스
+pass_description_003,특별 패스
+pass_description_004,이벤트 패스
+pass_description_005,3차 패스
+pass_description_006,4차 패스

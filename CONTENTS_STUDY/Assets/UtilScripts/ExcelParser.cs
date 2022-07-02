@@ -11,9 +11,9 @@ public class ExcelParser
     static string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
     static char[] TRIM_CHARS = { '\"' };
 
-    public static List<Dictionary<string, object>> Read(string file)
+    public static Dictionary<string, Dictionary<string, object>> Read(string file)
     {
-        var list = new List<Dictionary<string, object>>();
+        var list = new Dictionary<string, Dictionary<string, object>>();
         TextAsset data = Resources.Load(file) as TextAsset;
 
         var lines = Regex.Split(data.text, LINE_SPLIT_RE);
@@ -41,21 +41,21 @@ public class ExcelParser
 
                 object finalvalue = value;
 
-                switch(typename[j])
+                switch (typename[j])
                 {
                     case "string":
                         finalvalue = value;
                         break;
                     case "uint":
                         uint itemp;
-                        if(uint.TryParse(value, out itemp))
+                        if (uint.TryParse(value, out itemp))
                         {
                             finalvalue = itemp;
                         }
                         break;
                     case "long":
                         long ltemp;
-                        if(long.TryParse(value, out ltemp))
+                        if (long.TryParse(value, out ltemp))
                         {
                             finalvalue = ltemp;
                         }
@@ -67,7 +67,16 @@ public class ExcelParser
 
                 entry[header[j]] = finalvalue;
             }
-            list.Add(entry);
+
+            if (list.ContainsKey(values[0]) == true)
+            {
+                Debug.Log("ERROR!!!!!");
+                continue;
+            }
+            else
+            {
+                list.Add(values[0], entry);
+            }
         }
         return list;
     }
