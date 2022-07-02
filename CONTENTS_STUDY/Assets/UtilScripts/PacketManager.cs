@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utility.Singleton;
 
 public class PacketManager : MonoSingleton<PacketManager>
 {
@@ -18,7 +19,6 @@ public class PacketManager : MonoSingleton<PacketManager>
         }
 
         // 받은 패스포인트 처리할것.
-
     }
 
     // 패스 달성 패킷

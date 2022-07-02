@@ -30,5 +30,7 @@ public class Test : MonoBehaviour
         var key = data["1"]["STRINGKEY"].ToString();
         stringtable.TryGetValue(key, out var needstring2);
         Debug.Log($"{needstring2["DESCRIPTION"]}");
+
+        PacketManager.Instance.LoginRequest();
     }
 }

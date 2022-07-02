@@ -1,44 +1,103 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
+/// <summary>
+/// Be aware this will not prevent a non singleton constructor
+///   such as `T myT = new T();`
+/// To prevent that, add `protected T () {}` to your singleton class.
+/// As a note, this is made as MonoBehaviour because we need Coroutines.
+/// </summary>
+///
 
-//출처: https://welcomeheesuk.tistory.com/70 [자판기 게임즈:티스토리]
-public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
+	// 출처 우리회사....
+namespace Utility.Singleton
 {
-    private static object lockObject = new object();
-    private static T instance = null;
-    private static bool IsQuitting = false;
+	public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
+	{
+		private static T _instance = null;
+		private static object _syncobj = new object();
+		private static bool appIsClosing = false;
 
-    public static T Instance
-    {
-        // 쓰래드 안전화 - Thread-Safe
-        get
-        {
-            // 한번에 한 스래드만 lock블럭 실행
-            lock (lockObject)
-            {
-                // 비활성화 됐다면 기존꺼 내비두고 새로 만든다.
-                if (IsQuitting)
-                {
-                    return null;
-                }
+		public static T Instance
+		{
+			get
+			{
+				bool force = false;
 
-                // instance가 NULL일때 새로 생성한다.
-                if (instance == null)
-                {
-                    instance = GameObject.Instantiate(Resources.Load<T>("MonoSingleton/" + typeof(T).Name));
-                    DontDestroyOnLoad(instance.gameObject);
-                }
-                return instance;
-            }
-        }
-    }
+#if UNITY_EDITOR
+				if (false == Application.isPlaying)
+				{
+					force = true;
+				}
+#endif
+				if (false == force && appIsClosing)
+					return null;
+				try
+				{
+					lock (_syncobj)
+					{
+						if (_instance == null)
+						{
+							T[] objs = FindObjectsOfType<T>();
 
-    private void OnDisable()
-    {
-        // 비활성화 된다면 null로 변경
-        IsQuitting = true;
-        instance = null;
-    }
+							if (objs.Length > 0)
+								_instance = objs[0];
+
+							if (objs.Length > 1)
+								Debug.LogError("There is more than one " + typeof(T).Name + " in the scene.");
+
+							if (_instance == null)
+							{
+								string goName = typeof(T).ToString();
+								GameObject go = GameObject.Find(goName);
+								if (go == null)
+								{
+#if UNITY_EDITOR
+									Debug.Log($"MonoSingleton {goName} Create");
+#endif
+									go = new GameObject(goName);
+#if UNITY_EDITOR
+								}
+								else
+								{
+									Debug.Log($"MonoSingleton {goName} Find");
+#endif
+								}
+
+								if (false == go.TryGetComponent(out _instance))
+								{
+									_instance = go.AddComponent<T>();
+								}
+							}
+
+							//if (_instance is IInstantiatable instantiatable)
+							//{
+							//	instantiatable.OnInstantiate();
+							//}
+						}
+						return _instance;
+					}
+				}
+				catch (System.Exception e)
+				{
+					Debug.LogError($"Singleton<{typeof(T).Name}>.Instance : create error : {e.Message}");
+					throw;
+				}
+			}
+		}
+
+		/// <summary>
+		/// When Unity quits, it destroys objects in a random order.
+		/// In principle, a Singleton is only destroyed when application quits.
+		/// If any script calls Instance after it have been destroyed,
+		///   it will create a buggy ghost object that will stay on the Editor scene
+		///   even after stopping playing the Application. Really bad!
+		/// So, this was made to be sure we're not creating that buggy ghost object.
+		/// </summary>
+		protected virtual void OnApplicationQuit()
+		{
+			// release reference on exit
+			appIsClosing = true;
+		}
+	}
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utility.Singleton;
 
 public class ServerRole : MonoSingleton<ServerRole>
 {
