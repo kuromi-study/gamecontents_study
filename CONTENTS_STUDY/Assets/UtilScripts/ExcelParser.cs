@@ -60,6 +60,9 @@ public class ExcelParser
                             finalvalue = ltemp;
                         }
                         break;
+                    case "#":
+                        // 그냥 주석용 컬럼임으로 아무런 처리도 하ㅣ않음.
+                        continue;
                 }
 
                 entry[header[j]] = finalvalue;
