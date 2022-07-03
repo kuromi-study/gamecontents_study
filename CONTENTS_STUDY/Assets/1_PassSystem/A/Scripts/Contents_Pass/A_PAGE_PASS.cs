@@ -179,6 +179,9 @@ public class A_PAGE_PASS : MonoBehaviour
             var missionItem = Resources.Load<GameObject>("A_PAGE_PASS_MISSIONITEM");
             var missionItemGO = Instantiate<GameObject>(missionItem);
             missionItemGO.transform.SetParent(_scrollView.transform);
+
+            var script = missionItemGO.GetComponent<A_PAGE_PASS_MISSIONITEM>();
+            script.SetData(it);
         }
     }
 
