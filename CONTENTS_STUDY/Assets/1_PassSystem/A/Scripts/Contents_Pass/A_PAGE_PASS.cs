@@ -74,8 +74,13 @@ public class A_PAGE_PASS : MonoBehaviour
 
     void InitPage()
     {
+        // 진입시에는 패스탭이 On되도록
+        _passTab.isOn = true;
+
         AddBtnListner();
         SetSeason();
+        SetTabType(tabType.PASS);
+
         Refresh();
     }
 
@@ -88,8 +93,7 @@ public class A_PAGE_PASS : MonoBehaviour
         {
             if(set == true)
             {
-                _tabType = tabType.PASS;
-                RefreshScroll(_tabType);
+                SetTabType(tabType.PASS);
             }
         });
 
@@ -97,8 +101,7 @@ public class A_PAGE_PASS : MonoBehaviour
         {
             if (set == true)
             {
-                _tabType = tabType.MISSION;
-                RefreshScroll(_tabType);
+                SetTabType(tabType.MISSION);
             }
         });
     }
@@ -113,6 +116,12 @@ public class A_PAGE_PASS : MonoBehaviour
         _seasonID = 2;
     }
 
+    void SetTabType(tabType type)
+    {
+        _tabType = type;
+        RefreshScroll(_tabType);
+    }
+
     void Refresh()
     {
         RefreshTopLayer();
@@ -124,12 +133,7 @@ public class A_PAGE_PASS : MonoBehaviour
     {
         _backBtnText.SetTextWithStringKey("ui_pass_001");
 
-        var remainStr = A_StringManager.Instance.GetString("ui_pass_002");
-        if(remainStr != null)
-        {
-            remainStr = string.Format(remainStr, "1", "시간");
-            _remainTimeText.SetTextWithString(remainStr);
-        }
+        _remainTimeText.SetTextForRemainTime("20220707000000");
 
         _purchaseBtnText.SetTextWithStringKey("ui_pass_003");
     }
