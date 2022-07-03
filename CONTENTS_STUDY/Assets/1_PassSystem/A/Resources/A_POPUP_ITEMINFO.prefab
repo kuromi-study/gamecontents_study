@@ -398,6 +398,7 @@ GameObject:
   - component: {fileID: 1800214155362150516}
   - component: {fileID: 5108544531292684160}
   - component: {fileID: 1541879041867372229}
+  - component: {fileID: -6025386400271675421}
   m_Layer: 5
   m_Name: A_POPUP_ITEMINFO
   m_TagString: Untagged
@@ -479,6 +480,22 @@ MonoBehaviour:
   _itemImg: {fileID: 968102815004144371}
   _description: {fileID: 5559689472350243103}
   _closeBtn: {fileID: 4654562514379894679}
+--- !u!111 &-6025386400271675421
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4588432505875837270}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 1e29280c04a53c641b8a3e58a0dd7bd3, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 1e29280c04a53c641b8a3e58a0dd7bd3, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &6104519754071194692
 GameObject:
   m_ObjectHideFlags: 0
