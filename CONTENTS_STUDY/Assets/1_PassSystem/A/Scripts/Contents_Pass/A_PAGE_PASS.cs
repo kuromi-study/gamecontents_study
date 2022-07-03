@@ -41,6 +41,7 @@ public class A_PAGE_PASS : MonoBehaviour
     int _seasonID;
     int _needBeforePoint;
     Dictionary<string, object> nowLevelData = new Dictionary<string, object>();
+    Dictionary<string, object> nowPassData = new Dictionary<string, object>();
 
     [Header("const변수용")]
     readonly int PASS_MISSION_TYPE = 2;
@@ -78,6 +79,8 @@ public class A_PAGE_PASS : MonoBehaviour
 
         _backBtn?.onClick.RemoveAllListeners();
         _infoBtn?.onClick.RemoveAllListeners();
+        _purchaseBtn?.onClick.RemoveAllListeners();
+
         _passTab?.onValueChanged.RemoveAllListeners();
         _missionTab?.onValueChanged.RemoveAllListeners();
     }
@@ -101,6 +104,7 @@ public class A_PAGE_PASS : MonoBehaviour
     {
         _backBtn?.onClick.AddListener(OnClickClose);
         _infoBtn?.onClick.AddListener(OnClickInfo);
+        _purchaseBtn?.onClick.AddListener(OnClickPurchase);
 
         _passTab?.onValueChanged.AddListener((set) =>
         {
@@ -123,6 +127,9 @@ public class A_PAGE_PASS : MonoBehaviour
     {
         // 데이터뒤져서 현재시간에 맞는 시즌id를 가져와야한다.
         var passmain = ExcelParser.Read("PASS_TABLE-PASSMAIN");
+        
+        nowPassData = passmain.Where(x => int.Parse(x.Key.ToString()) == 2)
+            .Select(x=>x.Value).First();
 
         // rewardList 뽑아오기
         _seasonID = 2;
@@ -264,6 +271,11 @@ public class A_PAGE_PASS : MonoBehaviour
     }
 
     void OnClickInfo()
+    {
+        A_POPUP_PASSINFO.Open(nowPassData["description"].ToString());
+    }
+
+    void OnClickPurchase()
     {
 
     }
