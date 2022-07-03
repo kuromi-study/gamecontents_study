@@ -592,6 +592,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _levelText: {fileID: 4313660345996139133}
+  _normalRewardBtn: {fileID: 4313660345018252016}
   _normalRewardImg: {fileID: 4313660345018252015}
   _normalDimmed: {fileID: 1986754680696074386}
   _normalGetDimmed: {fileID: 7001692568085882745}

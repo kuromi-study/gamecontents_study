@@ -8,6 +8,7 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
     [SerializeField] Text _levelText;
     
     [Header("일반 보상")]
+    [SerializeField] Button _normalRewardBtn;
     [SerializeField] Image _normalRewardImg;
     [SerializeField] GameObject _normalDimmed;
     [SerializeField] GameObject _normalGetDimmed;
@@ -24,6 +25,16 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
     [SerializeField] GameObject _passGetDimmed2;
     [SerializeField] GameObject _passLockDimmed2;
 
+    bool CanGet
+    {
+        get
+        {
+            return _normalDimmed.activeSelf == false
+                && _normalGetDimmed == false
+                && _normalLockDimmed == false;
+        }
+    }
+
     Dictionary<string, object> _itemData = new Dictionary<string, object>();
     int _beforeNeedPoint;
 
@@ -31,6 +42,11 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
     public int BeforeNeedPoint
     {
         get => _beforeNeedPoint;
+    }
+
+    public void OnEnable()
+    {
+        _normalRewardBtn.onClick.AddListener(OnClickNormalItem);
     }
 
     public void SetData(Dictionary<string, object> data, int beforeNeedPoint)
@@ -87,4 +103,33 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
             _passRewardImg2.gameObject.SetActive(false);
         }
     }
+
+    #region 버튼 리스너처리
+    void OnClickNormalItem()
+    {
+        var normalRewardID = _itemData["NORMAL_REWARD_ID"].ToString();
+
+        if(CanGet == true)
+        {
+            // 보상획득 팝업 및 패킷발송시켜야한다.
+
+        }
+        else
+        {
+            // 아이템 설명 팝업을 발생시킨다.
+            A_POPUP_ITEMINFO.Open(normalRewardID);
+        }
+
+    }
+
+    void OnClickPassItem_1()
+    {
+
+    }
+
+    void OnClickPassItem_2()
+    {
+
+    }
+    #endregion
 }

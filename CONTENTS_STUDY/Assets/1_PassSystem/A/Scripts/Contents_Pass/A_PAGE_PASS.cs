@@ -46,6 +46,7 @@ public class A_PAGE_PASS : MonoBehaviour
 
     [Header("const변수용")]
     readonly int PASS_MISSION_TYPE = 2;
+    readonly int GAUGE_SIZE_X = 550;
 
     static GameObject _thispage;
 
@@ -243,19 +244,22 @@ public class A_PAGE_PASS : MonoBehaviour
 
     void RefreshBottomLayer()
     {
+        // 레벨
         var levelstr = A_StringManager.Instance.GetString("ui_pass_005");
         levelstr = string.Format(levelstr, "");
         _lvText.text = "";
 
+        // 포인트
         var pointstr = A_StringManager.Instance.GetString("ui_pass_006");
         var needPoint = _needBeforePoint + int.Parse(nowLevelData["NEEDPOINT"].ToString());
 
         pointstr = string.Format(pointstr, A_PassInfo.Instance.PointString, needPoint.ToString());
         _pointText.text = pointstr;
 
+        // 게이지
         var forGaugePercent = (float)A_PassInfo.Instance.Point / (float)needPoint;
         var sizey = _gaugeImg.rectTransform.sizeDelta.y;
-        _gaugeImg.rectTransform.sizeDelta = new Vector2(550 * forGaugePercent, sizey);
+        _gaugeImg.rectTransform.sizeDelta = new Vector2(GAUGE_SIZE_X * forGaugePercent, sizey);
     }
 
     #region 버튼 리스너 처리
