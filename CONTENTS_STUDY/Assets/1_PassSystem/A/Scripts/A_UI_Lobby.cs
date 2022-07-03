@@ -7,6 +7,11 @@ public class A_UI_Lobby : MonoBehaviour
 {
     [SerializeField] private Button _passBtn;
 
+    private void Awake()
+    {
+        PacketManager.Instance.LoginRequest();
+    }
+
     private void OnEnable()
     {
         _passBtn?.onClick.AddListener(OnClickPass);

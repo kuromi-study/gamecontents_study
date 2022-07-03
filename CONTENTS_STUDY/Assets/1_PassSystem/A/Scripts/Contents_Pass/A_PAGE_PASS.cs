@@ -66,6 +66,8 @@ public class A_PAGE_PASS : MonoBehaviour
 
     void OnDisable()
     {
+        A_PassInfo.Instance.RemoveEventAll(A_PassInfo.Instance.PASS_EVENT_NAME);
+
         _backBtn?.onClick.RemoveAllListeners();
         _infoBtn?.onClick.RemoveAllListeners();
         _passTab?.onValueChanged.RemoveAllListeners();
@@ -76,6 +78,9 @@ public class A_PAGE_PASS : MonoBehaviour
     {
         // 진입시에는 패스탭이 On되도록
         _passTab.isOn = true;
+
+        // 이벤트등록
+        A_PassInfo.Instance.AddEvent(A_PassInfo.Instance.PASS_EVENT_NAME, Refresh);
 
         AddBtnListner();
         SetSeason();
@@ -132,9 +137,7 @@ public class A_PAGE_PASS : MonoBehaviour
     void RefreshTopLayer()
     {
         _backBtnText.SetTextWithStringKey("ui_pass_001");
-
         _remainTimeText.SetTextForRemainTime("20220707000000");
-
         _purchaseBtnText.SetTextWithStringKey("ui_pass_003");
     }
 
@@ -160,25 +163,39 @@ public class A_PAGE_PASS : MonoBehaviour
     void RefreshScrollPass()
     {
         var passreward = ExcelParser.Read("PASS_TABLE-PASSREWARD");
+        var passLevelTable = ExcelParser.Read("PASS_TABLE-PASSLEVEL");
         var rewardList = passreward.Values.Where(x => int.Parse(x["PASSMAIN_ID"].ToString()) == _seasonID).ToList();
 
         // 패스보상은 최종보상이 항상 최상단에 표시되기 때문에 전부 표시를 해서는 안됩니다.
         var count = rewardList.Count;
+
+        int needAllPoint = 0;
+
         for (int i = 0; i < count - 1; i++)
         {
             var it = rewardList[i];
+
+            var needPoint = int.Parse(passLevelTable[it["PASSLEVEL_ID"].ToString()]["NEEDPOINT"].ToString());
+
+            if (i > 0)
+            { 
+                // 현재단계 도달까지 필요한 포인트를 저장한다.
+                needAllPoint += needPoint;
+            }
 
             var passItem = Resources.Load<GameObject>("A_PAGE_PASS_PASSITEM");
             var passItemGO = Instantiate<GameObject>(passItem);
             passItemGO.transform.SetParent(_scrollView.transform);
 
             var script = passItemGO.GetComponent<A_PAGE_PASS_PASSITEM>();
-            script.SetData(it);
+            script.SetData(it, needAllPoint);
         }
 
         var lastRewardData = rewardList[count - 1];
         var lastRewardScript = _lastReward.GetComponent<A_PAGE_PASS_PASSITEM>();
-        lastRewardScript.SetData(lastRewardData);
+        var needLastPoint = int.Parse(passLevelTable[lastRewardData["PASSLEVEL_ID"].ToString()]["NEEDPOINT"].ToString());
+        needAllPoint += needLastPoint;
+        lastRewardScript.SetData(lastRewardData,needAllPoint);
     }
 
     void RefreshScrollMission()

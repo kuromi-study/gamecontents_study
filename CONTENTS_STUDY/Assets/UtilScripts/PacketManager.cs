@@ -39,6 +39,10 @@ public class PacketManager : MonoSingleton<PacketManager>
 
         // 받은 패스포인트 처리할것.
 
+
+        // A -- Myinfo에 받아온 패스정보 저장 및 브로드캐스팅처리
+        A_PassInfo.Instance.SetPassInfo(passpoint);
+        A_PassInfo.Instance.BroadCastEvent(A_PassInfo.Instance.PASS_EVENT_NAME);
     }
 
     // 패스 포인트 획득 패킷
@@ -56,6 +60,10 @@ public class PacketManager : MonoSingleton<PacketManager>
 
         // 받은 패스포인트 처리할것.
 
+
+        // A -- Myinfo에 받아온 패스정보 저장 및 브로드캐스팅처리
+        A_PassInfo.Instance.SetPassInfo(passpoint);
+        A_PassInfo.Instance.BroadCastEvent(A_PassInfo.Instance.PASS_EVENT_NAME);
     }
 
     // 미션 달성 패킷

@@ -25,16 +25,18 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
     [SerializeField] GameObject _passLockDimmed2;
 
     Dictionary<string, object> _itemData = new Dictionary<string, object>();
+    int _beforeNeedPoint;
 
-    public void SetData(Dictionary<string, object> data)
+    public void SetData(Dictionary<string, object> data, int beforeNeedPoint)
     {
         _itemData = data;
+        _beforeNeedPoint = beforeNeedPoint;
 
         // 레벨세팅
         var passLevelID = _itemData["PASSLEVEL_ID"].ToString();
         var levelTable = ExcelParser.Read("PASS_TABLE-PASSLEVEL");
-        var nowLevel = levelTable[passLevelID]["LEVEL"];
-        _levelText.text = nowLevel.ToString();
+        var nowLevel = levelTable[passLevelID]["LEVEL"].ToString();
+        _levelText.text = nowLevel;
 
         // 일반아이템세팅
         var normalRewardID = _itemData["NORMAL_REWARD_ID"].ToString();
@@ -43,11 +45,23 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
 
         _normalRewardImg.sprite = Resources.Load<Sprite>(normalRewardPath);
 
+        var normalDimmed = A_PassInfo.Instance.Point < _beforeNeedPoint;
+        var getDimmed = A_PassInfo.Instance.Step >= int.Parse(nowLevel);
+
+        _normalDimmed.SetActive(normalDimmed);
+        _normalGetDimmed.SetActive(getDimmed);
+
         // 패스아이템 세팅
         var passRewardID_1 = _itemData["PASS_REWARD_ID_1"].ToString();
         var passRewardPath_1 = rewardTable[passRewardID_1]["IMAGEPATH"].ToString();
 
         _passRewardImg1.sprite = Resources.Load<Sprite>(passRewardPath_1);
+
+        var lockDimmed = true; // 구매했는지 여부를 갱신하는 함수 추가되어야한다.
+
+        _passDimmed1.SetActive(normalDimmed);
+        _passGetDimmed1.SetActive(getDimmed);
+        _passLockDimmed1.SetActive(lockDimmed);
 
         var passRewardID_2 = _itemData["PASS_REWARD_ID_2"].ToString();
         if (passRewardID_2.CompareTo("0") != 0)
@@ -57,6 +71,10 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
 
             _passRewardImg2.sprite = Resources.Load<Sprite>(passRewardPath_2);
             _passRewardImg2.gameObject.SetActive(true);
+
+            _passDimmed2.SetActive(normalDimmed);
+            _passGetDimmed2.SetActive(getDimmed);
+            _passLockDimmed2.SetActive(lockDimmed);
         }
         else
         {
