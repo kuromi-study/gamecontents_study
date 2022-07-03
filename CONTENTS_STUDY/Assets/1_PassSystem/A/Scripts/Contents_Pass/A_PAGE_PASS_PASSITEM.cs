@@ -27,6 +27,12 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
     Dictionary<string, object> _itemData = new Dictionary<string, object>();
     int _beforeNeedPoint;
 
+    // 해당 패스의 시작점
+    public int BeforeNeedPoint
+    {
+        get => _beforeNeedPoint;
+    }
+
     public void SetData(Dictionary<string, object> data, int beforeNeedPoint)
     {
         _itemData = data;

@@ -343,11 +343,11 @@ RectTransform:
   m_Father: {fileID: 713922901162573178}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 550, y: 48}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &1321474712662467381
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -376,7 +376,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2169,6 +2169,11 @@ MonoBehaviour:
   _missionPrefab: {fileID: 4313660345162823378, guid: 877136d60948db0469852e84d88ebf54, type: 3}
   _lastReward: {fileID: 6655916234908515788}
   _scrollView: {fileID: 6066462947905248593}
+  _lvUpBtn: {fileID: 5973685771721279876}
+  _lvText: {fileID: 7545320415774467483}
+  _pointText: {fileID: 673912816075950033}
+  _gaugeImg: {fileID: 1254316172894724362}
+  _getAllBtn: {fileID: 22006757904057817}
 --- !u!1 &6066462947873801084
 GameObject:
   m_ObjectHideFlags: 0

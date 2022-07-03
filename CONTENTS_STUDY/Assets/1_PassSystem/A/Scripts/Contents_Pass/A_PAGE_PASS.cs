@@ -30,10 +30,19 @@ public class A_PAGE_PASS : MonoBehaviour
     [SerializeField] GameObject _lastReward;
     [SerializeField] GameObject _scrollView;
 
+    [Header("하단 오브젝트")]
+    [SerializeField] Button _lvUpBtn;
+    [SerializeField] Text _lvText;
+    [SerializeField] Text _pointText;
+    [SerializeField] Image _gaugeImg;
+    [SerializeField] Button _getAllBtn;
+
     tabType _tabType = tabType.PASS;
 
     [Header("지역변수")]
     int _seasonID;
+    int _needBeforePoint;
+    Dictionary<string, object> nowLevelData = new Dictionary<string, object>();
 
     [Header("const변수용")]
     readonly int PASS_MISSION_TYPE = 2;
@@ -175,12 +184,21 @@ public class A_PAGE_PASS : MonoBehaviour
         {
             var it = rewardList[i];
 
-            var needPoint = int.Parse(passLevelTable[it["PASSLEVEL_ID"].ToString()]["NEEDPOINT"].ToString());
+            var passLevelData = passLevelTable[it["PASSLEVEL_ID"].ToString()];
+            var needPoint = int.Parse(passLevelData["NEEDPOINT"].ToString());
 
             if (i > 0)
             { 
                 // 현재단계 도달까지 필요한 포인트를 저장한다.
                 needAllPoint += needPoint;
+            }
+
+            if(A_PassInfo.Instance.Point < needAllPoint
+                && A_PassInfo.Instance.Point >= needAllPoint - needPoint)
+            {
+                // 현재 필요한 포인트 저장용.
+                _needBeforePoint = needAllPoint - needPoint;
+                nowLevelData = passLevelData;
             }
 
             var passItem = Resources.Load<GameObject>("A_PAGE_PASS_PASSITEM");
@@ -225,7 +243,19 @@ public class A_PAGE_PASS : MonoBehaviour
 
     void RefreshBottomLayer()
     {
+        var levelstr = A_StringManager.Instance.GetString("ui_pass_005");
+        levelstr = string.Format(levelstr, "");
+        _lvText.text = "";
 
+        var pointstr = A_StringManager.Instance.GetString("ui_pass_006");
+        var needPoint = _needBeforePoint + int.Parse(nowLevelData["NEEDPOINT"].ToString());
+
+        pointstr = string.Format(pointstr, A_PassInfo.Instance.PointString, needPoint.ToString());
+        _pointText.text = pointstr;
+
+        var forGaugePercent = (float)A_PassInfo.Instance.Point / (float)needPoint;
+        var sizey = _gaugeImg.rectTransform.sizeDelta.y;
+        _gaugeImg.rectTransform.sizeDelta = new Vector2(550 * forGaugePercent, sizey);
     }
 
     #region 버튼 리스너 처리

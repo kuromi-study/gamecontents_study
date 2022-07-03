@@ -26,6 +26,14 @@ public class A_PassInfo : MonoSingleton<A_PassInfo>
         }
     }
 
+    public string PointString
+    {
+        get
+        {
+            return _passInfo.Point.ToString();
+        }
+    }
+
     public void SetPassInfo(PassPoint passpoint)
     {
         _passInfo = passpoint;
