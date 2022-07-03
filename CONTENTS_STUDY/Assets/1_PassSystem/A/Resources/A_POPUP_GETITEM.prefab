@@ -116,7 +116,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -350.00073, y: 0}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &573180088455321442
@@ -279,7 +279,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2351857139249329464}
   m_HandleRect: {fileID: 6821141431286545555}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1.0000021
   m_Size: 0.72
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -450,6 +450,7 @@ GameObject:
   - component: {fileID: 2557106655059662933}
   - component: {fileID: 6128198245962931353}
   - component: {fileID: 5559689472350243103}
+  - component: {fileID: 5760458832015786422}
   m_Layer: 5
   m_Name: txt_description
   m_TagString: Untagged
@@ -518,6 +519,20 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\uC544\uC774\uD15C \uD68D\uB4DD!"
+--- !u!114 &5760458832015786422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2828872154400621196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec81dfc1c151a584eabe0c79c82bc381, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: ui_pass_009
+  _targetText: {fileID: 5559689472350243103}
 --- !u!1 &4588432505875837270
 GameObject:
   m_ObjectHideFlags: 0
@@ -530,6 +545,7 @@ GameObject:
   - component: {fileID: 1800214155362150516}
   - component: {fileID: 5108544531292684160}
   - component: {fileID: 1285860847769450190}
+  - component: {fileID: 6335120447928210255}
   m_Layer: 5
   m_Name: A_POPUP_GETITEM
   m_TagString: Untagged
@@ -611,6 +627,22 @@ MonoBehaviour:
   _scrollView: {fileID: 1036109488662128180}
   _itemImagePrefab: {fileID: 0}
   _closeBtn: {fileID: 4654562514379894679}
+--- !u!111 &6335120447928210255
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4588432505875837270}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 6ed15ca2a8ec27e4284bf933f0d0de43, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 6ed15ca2a8ec27e4284bf933f0d0de43, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &5383922315009681991
 GameObject:
   m_ObjectHideFlags: 0

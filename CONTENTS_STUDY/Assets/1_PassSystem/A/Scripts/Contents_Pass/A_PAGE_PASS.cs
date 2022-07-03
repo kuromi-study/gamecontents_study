@@ -16,11 +16,9 @@ public class A_PAGE_PASS : MonoBehaviour
 
     [Header("상단 오브젝트")]
     [SerializeField] Button _backBtn;
-    [SerializeField] Text _backBtnText;
     [SerializeField] Button _infoBtn;
     [SerializeField] Text _remainTimeText;
     [SerializeField] Button _purchaseBtn;
-    [SerializeField] Text _purchaseBtnText;
     [SerializeField] Toggle _passTab;
     [SerializeField] Toggle _missionTab;
 
@@ -124,7 +122,6 @@ public class A_PAGE_PASS : MonoBehaviour
     void SetSeason()
     {
         // 데이터뒤져서 현재시간에 맞는 시즌id를 가져와야한다.
-
         var passmain = ExcelParser.Read("PASS_TABLE-PASSMAIN");
 
         // rewardList 뽑아오기
@@ -146,9 +143,7 @@ public class A_PAGE_PASS : MonoBehaviour
 
     void RefreshTopLayer()
     {
-        _backBtnText.SetTextWithStringKey("ui_pass_001");
         _remainTimeText.SetTextForRemainTime("20220707000000");
-        _purchaseBtnText.SetTextWithStringKey("ui_pass_003");
     }
 
     void RefreshScroll(tabType type)
