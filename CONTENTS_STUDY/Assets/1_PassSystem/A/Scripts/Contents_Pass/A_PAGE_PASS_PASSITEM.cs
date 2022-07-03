@@ -30,8 +30,7 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
         get
         {
             return _normalDimmed.activeSelf == false
-                && _normalGetDimmed == false
-                && _normalLockDimmed == false;
+                && _normalGetDimmed.activeSelf == false;
         }
     }
 
@@ -42,6 +41,18 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
     public int BeforeNeedPoint
     {
         get => _beforeNeedPoint;
+    }
+
+    public int PassLevel
+    {
+        get
+        {
+            var passLevelID = _itemData["PASSLEVEL_ID"].ToString();
+            var levelTable = ExcelParser.Read("PASS_TABLE-PASSLEVEL");
+            var nowLevel = int.Parse(levelTable[passLevelID]["LEVEL"].ToString());
+
+            return nowLevel;
+        }
     }
 
     public void OnEnable()
@@ -55,10 +66,7 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
         _beforeNeedPoint = beforeNeedPoint;
 
         // 레벨세팅
-        var passLevelID = _itemData["PASSLEVEL_ID"].ToString();
-        var levelTable = ExcelParser.Read("PASS_TABLE-PASSLEVEL");
-        var nowLevel = levelTable[passLevelID]["LEVEL"].ToString();
-        _levelText.text = nowLevel;
+        _levelText.text = PassLevel.ToString();
 
         // 일반아이템세팅
         var normalRewardID = _itemData["NORMAL_REWARD_ID"].ToString();
@@ -68,7 +76,7 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
         _normalRewardImg.sprite = Resources.Load<Sprite>(normalRewardPath);
 
         var normalDimmed = A_PassInfo.Instance.Point < _beforeNeedPoint;
-        var getDimmed = A_PassInfo.Instance.Step >= int.Parse(nowLevel);
+        var getDimmed = A_PassInfo.Instance.Step >= PassLevel;
 
         _normalDimmed.SetActive(normalDimmed);
         _normalGetDimmed.SetActive(getDimmed);
@@ -112,7 +120,7 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
         if(CanGet == true)
         {
             // 보상획득 팝업 및 패킷발송시켜야한다.
-
+            PacketManager.Instance.PassRewardRequest(PassLevel);
         }
         else
         {
