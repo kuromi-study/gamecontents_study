@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,11 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
     [SerializeField] GameObject _passGetDimmed2;
     [SerializeField] GameObject _passLockDimmed2;
 
+    Action<int> _OnClickGetItem;
+
+    Dictionary<string, object> _itemData = new Dictionary<string, object>();
+    int _beforeNeedPoint;
+
     bool CanGet
     {
         get
@@ -33,9 +39,6 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
                 && _normalGetDimmed.activeSelf == false;
         }
     }
-
-    Dictionary<string, object> _itemData = new Dictionary<string, object>();
-    int _beforeNeedPoint;
 
     // 해당 패스의 시작점
     public int BeforeNeedPoint
@@ -60,10 +63,11 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
         _normalRewardBtn.onClick.AddListener(OnClickNormalItem);
     }
 
-    public void SetData(Dictionary<string, object> data, int beforeNeedPoint)
+    public void SetData(Dictionary<string, object> data, int beforeNeedPoint, Action<int> action = null)
     {
         _itemData = data;
         _beforeNeedPoint = beforeNeedPoint;
+        _OnClickGetItem = action;
 
         // 레벨세팅
         _levelText.text = PassLevel.ToString();
@@ -120,6 +124,7 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
         if(CanGet == true)
         {
             // 보상획득 팝업 및 패킷발송시켜야한다.
+            _OnClickGetItem.Invoke(PassLevel);
             PacketManager.Instance.PassRewardRequest(PassLevel);
         }
         else
