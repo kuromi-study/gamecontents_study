@@ -158,8 +158,12 @@ public class A_PAGE_PASS : MonoBehaviour
         var passreward = ExcelParser.Read("PASS_TABLE-PASSREWARD");
         var rewardList = passreward.Values.Where(x => int.Parse(x["PASSMAIN_ID"].ToString()) == _seasonID).ToList();
 
-        foreach (var it in rewardList)
+        // 패스보상은 최종보상이 항상 최상단에 표시되기 때문에 전부 표시를 해서는 안됩니다.
+        var count = rewardList.Count;
+        for (int i = 0; i < count - 1; i++)
         {
+            var it = rewardList[i];
+
             var passItem = Resources.Load<GameObject>("A_PAGE_PASS_PASSITEM");
             var passItemGO = Instantiate<GameObject>(passItem);
             passItemGO.transform.SetParent(_scrollView.transform);
@@ -167,6 +171,10 @@ public class A_PAGE_PASS : MonoBehaviour
             var script = passItemGO.GetComponent<A_PAGE_PASS_PASSITEM>();
             script.SetData(it);
         }
+
+        var lastRewardData = rewardList[count - 1];
+        var lastRewardScript = _lastReward.GetComponent<A_PAGE_PASS_PASSITEM>();
+        lastRewardScript.SetData(lastRewardData);
     }
 
     void RefreshScrollMission()
