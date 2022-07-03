@@ -163,6 +163,9 @@ public class A_PAGE_PASS : MonoBehaviour
             var passItem = Resources.Load<GameObject>("A_PAGE_PASS_PASSITEM");
             var passItemGO = Instantiate<GameObject>(passItem);
             passItemGO.transform.SetParent(_scrollView.transform);
+
+            var script = passItemGO.GetComponent<A_PAGE_PASS_PASSITEM>();
+            script.SetData(it);
         }
     }
 
