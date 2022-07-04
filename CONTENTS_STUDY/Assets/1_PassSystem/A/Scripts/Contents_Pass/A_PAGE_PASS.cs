@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,6 +84,8 @@ public class A_PAGE_PASS : MonoBehaviour
 
         _passTab?.onValueChanged.RemoveAllListeners();
         _missionTab?.onValueChanged.RemoveAllListeners();
+
+        StopAllCoroutines();
     }
 
     void InitPage()
@@ -96,6 +99,9 @@ public class A_PAGE_PASS : MonoBehaviour
         AddBtnListner();
         SetSeason();
         SetTabType(tabType.PASS);
+
+        StopAllCoroutines();
+        StartCoroutine("SetTimer");
 
         Refresh();
     }
@@ -127,12 +133,24 @@ public class A_PAGE_PASS : MonoBehaviour
     {
         // 데이터뒤져서 현재시간에 맞는 시즌id를 가져와야한다.
         var passmain = ExcelParser.Read("PASS_TABLE-PASSMAIN");
-        
-        nowPassData = passmain.Where(x => int.Parse(x.Key.ToString()) == 2)
-            .Select(x=>x.Value).First();
+
+        var nowdate = DateTime.Now;
+        foreach (var it in passmain)
+        {
+            var startdatestr = it.Value["STARTDATE"].ToString();
+            var enddatestr = it.Value["ENDDATE"].ToString();
+
+            var startdate = A_StringManager.Instance.ConvertStringTimeToDate(startdatestr);
+            var enddate = A_StringManager.Instance.ConvertStringTimeToDate(enddatestr);
+
+            if (startdate <= nowdate && enddate > nowdate)
+            {
+                nowPassData = it.Value;
+            }
+        }
 
         // rewardList 뽑아오기
-        _seasonID = 2;
+        _seasonID = int.Parse(nowPassData["ID"].ToString());
     }
 
     void SetTabType(tabType type)
@@ -150,7 +168,7 @@ public class A_PAGE_PASS : MonoBehaviour
 
     void RefreshTopLayer()
     {
-        _remainTimeText.SetTextForRemainTime("20220707000000");
+        _remainTimeText.SetTextForRemainTime(nowPassData["ENDDATE"].ToString());
     }
 
     void RefreshScroll(tabType type)
@@ -262,6 +280,29 @@ public class A_PAGE_PASS : MonoBehaviour
         var forGaugePercent = (float)A_PassInfo.Instance.Point / (float)needPoint;
         var sizey = _gaugeImg.rectTransform.sizeDelta.y;
         _gaugeImg.rectTransform.sizeDelta = new Vector2(GAUGE_SIZE_X * forGaugePercent, sizey);
+    }
+
+    IEnumerator SetTimer()
+    {
+        while (true)
+        {
+            var nowdate = DateTime.Now;
+            var enddatestr = nowPassData["ENDDATE"].ToString();
+            var enddate = A_StringManager.Instance.ConvertStringTimeToDate(enddatestr);
+
+            if (enddate <= nowdate)
+            {
+                break;
+            }
+            else
+            {
+                RefreshTopLayer();
+            }
+
+            yield return new WaitForSeconds(1);
+        }
+
+        InitPage();
     }
 
     #region 버튼 리스너 처리

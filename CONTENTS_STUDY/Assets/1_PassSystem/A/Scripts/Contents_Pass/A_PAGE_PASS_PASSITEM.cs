@@ -58,9 +58,14 @@ public class A_PAGE_PASS_PASSITEM : MonoBehaviour
         }
     }
 
-    public void OnEnable()
+    void OnEnable()
     {
         _normalRewardBtn.onClick.AddListener(OnClickNormalItem);
+    }
+
+    void OnDisable()
+    {
+        _normalRewardBtn.onClick.RemoveAllListeners();
     }
 
     public void SetData(Dictionary<string, object> data, int beforeNeedPoint, Action<int> action = null)
