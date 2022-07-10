@@ -10,11 +10,19 @@ public class A_PassInfo : MonoSingleton<A_PassInfo>
     // step -- ÇöÀç½ºÅÜ
     private PassPoint _passInfo;
 
-    public int Step
+    public int NormalStep
     {
         get
         {
-            return _passInfo.Step;
+            return _passInfo.NormalStep;
+        }
+    }
+
+    public int PassStep
+    {
+        get
+        {
+            return _passInfo.PassStep;
         }
     }
 
@@ -24,6 +32,11 @@ public class A_PassInfo : MonoSingleton<A_PassInfo>
         {
             return _passInfo.Point;
         }
+    }
+
+    public bool Premium
+    {
+        get => _passInfo.Premium;
     }
 
     public string PointString

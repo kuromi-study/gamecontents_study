@@ -111,6 +111,7 @@ public class A_PAGE_PASS : MonoBehaviour
         _backBtn?.onClick.AddListener(OnClickClose);
         _infoBtn?.onClick.AddListener(OnClickInfo);
         _purchaseBtn?.onClick.AddListener(OnClickPurchase);
+        _lvUpBtn?.onClick.AddListener(OnClickLevelUP);
 
         _passTab?.onValueChanged.AddListener((set) =>
         {
@@ -305,6 +306,46 @@ public class A_PAGE_PASS : MonoBehaviour
         InitPage();
     }
 
+    void ShowDiffReward(int level, bool isPremium)
+    {
+        // 진짜 귀찮지만 그냥 노말보상만 하나하나 정리해보자...
+        List<string> rewardItemList = new List<string>();
+
+        var beforeStep = isPremium == false ? A_PassInfo.Instance.NormalStep + 1 :
+            A_PassInfo.Instance.PassStep + 1;
+
+        var nowStep = level;
+
+        // beforeStep ~ nowStep 까지 획득처리를 해야한다.
+        var passreward = ExcelParser.Read("PASS_TABLE-PASSREWARD");
+        var passLevelTable = ExcelParser.Read("PASS_TABLE-PASSLEVEL");
+
+        // 시즌이 같고 레벨이 사이에있는 아이템ID를 가져온다.
+        if (isPremium == false)
+        {
+            rewardItemList = passreward.Values.
+                Where(x => int.Parse(x["PASSMAIN_ID"].ToString()) == _seasonID
+                && int.Parse(passLevelTable[x["PASSLEVEL_ID"].ToString()]["LEVEL"].ToString()) <= nowStep
+                && int.Parse(passLevelTable[x["PASSLEVEL_ID"].ToString()]["LEVEL"].ToString()) >= beforeStep).
+                Select(x => x["NORMAL_REWARD_ID"].ToString()).ToList();
+        }
+        else
+        {
+            var tempList = passreward.Values.
+                Where(x => int.Parse(x["PASSMAIN_ID"].ToString()) == _seasonID
+                && int.Parse(passLevelTable[x["PASSLEVEL_ID"].ToString()]["LEVEL"].ToString()) <= nowStep
+                && int.Parse(passLevelTable[x["PASSLEVEL_ID"].ToString()]["LEVEL"].ToString()) >= beforeStep).ToList();
+
+            var pass1List = tempList.Where(x => int.Parse(x["PASS_REWARD_ID_1"].ToString()) != 0).Select(x => x["PASS_REWARD_ID_1"].ToString()).ToList();
+            var pass2List = tempList.Where(x => int.Parse(x["PASS_REWARD_ID_2"].ToString()) != 0).Select(x => x["PASS_REWARD_ID_2"].ToString()).ToList();
+
+            rewardItemList.AddRange(pass1List);
+            rewardItemList.AddRange(pass2List);
+        }
+
+        A_POPUP_GETITEM.Open(rewardItemList);
+    }
+
     #region 버튼 리스너 처리
     void OnClickClose()
     {
@@ -318,29 +359,17 @@ public class A_PAGE_PASS : MonoBehaviour
 
     void OnClickPurchase()
     {
-
+        PacketManager.Instance.BuyPremiumRequest();
     }
 
-    void ShowDiffReward(int level)
+    void OnClickLevelUP()
     {
-        // 진짜 귀찮지만 그냥 노말보상만 하나하나 정리해보자...
-        List<string> rewardItemList = new List<string>();
+        PacketManager.Instance.BuyLevelRequest();
+    }
 
-        var beforeStep = A_PassInfo.Instance.Step + 1;
-        var nowStep = level;
+    void OnClickGetAll()
+    {
 
-        // beforeStep ~ nowStep 까지 획득처리를 해야한다.
-        var passreward = ExcelParser.Read("PASS_TABLE-PASSREWARD");
-        var passLevelTable = ExcelParser.Read("PASS_TABLE-PASSLEVEL");
-
-        // 시즌이 같고 레벨이 사이에있는 아이템ID를 가져온다.
-        rewardItemList = passreward.Values.
-            Where(x => int.Parse(x["PASSMAIN_ID"].ToString()) == _seasonID
-            && int.Parse(passLevelTable[x["PASSLEVEL_ID"].ToString()]["LEVEL"].ToString()) <= nowStep
-            && int.Parse(passLevelTable[x["PASSLEVEL_ID"].ToString()]["LEVEL"].ToString()) >= beforeStep).
-            Select(x => x["NORMAL_REWARD_ID"].ToString()).ToList();
-
-        A_POPUP_GETITEM.Open(rewardItemList);
     }
     #endregion
 }

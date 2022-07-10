@@ -25,9 +25,9 @@ public class PacketManager : MonoSingleton<PacketManager>
     }
 
     // 패스 달성 패킷
-    public void PassRewardRequest(int step)
+    public void PassRewardRequest(int step, bool isPremium)
     {
-        ServerRole.Instance.PassRewardProcess(step);
+        ServerRole.Instance.PassRewardProcess(step, isPremium);
     }
 
     public void PassRewardResponse(PassPoint passpoint)
@@ -83,5 +83,29 @@ public class PacketManager : MonoSingleton<PacketManager>
         {
             Debug.Log($"Error :: {code.ToString()}");
         }
+    }
+
+    public void BuyPremiumRequest()
+    {
+        ServerRole.Instance.PurchasePremium();
+    }
+
+    public void BuyPremiumResponse(PassPoint passpoint)
+    {
+        // A -- Myinfo에 받아온 패스정보 저장 및 브로드캐스팅처리
+        A_PassInfo.Instance.SetPassInfo(passpoint);
+        A_PassInfo.Instance.BroadCastEvent(A_PassInfo.Instance.PASS_EVENT_NAME);
+    }
+
+    public void BuyLevelRequest()
+    {
+        ServerRole.Instance.PurchaseLevel();
+    }
+
+    public void BuyLevelResponse(PassPoint passpoint)
+    {
+        // A -- Myinfo에 받아온 패스정보 저장 및 브로드캐스팅처리
+        A_PassInfo.Instance.SetPassInfo(passpoint);
+        A_PassInfo.Instance.BroadCastEvent(A_PassInfo.Instance.PASS_EVENT_NAME);
     }
 }
