@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ public class A_PAGE_PASS : MonoBehaviour
         MISSION,
     };
 
-    [Header("»ó´Ü ¿ÀºêÁ§Æ®")]
+    [Header("ìƒë‹¨ ì˜¤ë¸Œì íŠ¸")]
     [SerializeField] Button _backBtn;
     [SerializeField] Button _infoBtn;
     [SerializeField] Text _remainTimeText;
@@ -23,13 +23,13 @@ public class A_PAGE_PASS : MonoBehaviour
     [SerializeField] Toggle _passTab;
     [SerializeField] Toggle _missionTab;
 
-    [Header("¸®½ºÆ® ¿ÀºêÁ§Æ®")]
+    [Header("ë¦¬ìŠ¤íŠ¸ ì˜¤ë¸Œì íŠ¸")]
     [SerializeField] GameObject _rewardPrefab;
     [SerializeField] GameObject _missionPrefab;
     [SerializeField] GameObject _lastReward;
     [SerializeField] GameObject _scrollView;
 
-    [Header("ÇÏ´Ü ¿ÀºêÁ§Æ®")]
+    [Header("í•˜ë‹¨ ì˜¤ë¸Œì íŠ¸")]
     [SerializeField] Button _lvUpBtn;
     [SerializeField] Text _lvText;
     [SerializeField] Text _pointText;
@@ -38,13 +38,13 @@ public class A_PAGE_PASS : MonoBehaviour
 
     tabType _tabType = tabType.PASS;
 
-    [Header("Áö¿ªº¯¼ö")]
+    [Header("ì§€ì—­ë³€ìˆ˜")]
     int _seasonID;
     int _needBeforePoint;
     Dictionary<string, object> nowLevelData = new Dictionary<string, object>();
     Dictionary<string, object> nowPassData = new Dictionary<string, object>();
 
-    [Header("constº¯¼ö¿ë")]
+    [Header("constë³€ìˆ˜ìš©")]
     readonly int PASS_MISSION_TYPE = 2;
     readonly int GAUGE_SIZE_X = 550;
 
@@ -52,8 +52,8 @@ public class A_PAGE_PASS : MonoBehaviour
 
     public static void Open()
     {
-        // ÆĞ½º¹öÆ°À» Å¬¸¯ÇßÀ»°æ¿ì
-        // ÆĞ½ºÆäÀÌÁö¸¦ Ãâ·ÂÇØ¾ßÇÑ´Ù.
+        // íŒ¨ìŠ¤ë²„íŠ¼ì„ í´ë¦­í–ˆì„ê²½ìš°
+        // íŒ¨ìŠ¤í˜ì´ì§€ë¥¼ ì¶œë ¥í•´ì•¼í•œë‹¤.
         if (_thispage == null)
         {
             var uiroot = GameObject.Find("UIRoot");
@@ -90,10 +90,10 @@ public class A_PAGE_PASS : MonoBehaviour
 
     void InitPage()
     {
-        // ÁøÀÔ½Ã¿¡´Â ÆĞ½ºÅÇÀÌ OnµÇµµ·Ï
+        // ì§„ì…ì‹œì—ëŠ” íŒ¨ìŠ¤íƒ­ì´ Onë˜ë„ë¡
         _passTab.isOn = true;
 
-        // ÀÌº¥Æ®µî·Ï
+        // ì´ë²¤íŠ¸ë“±ë¡
         A_PassInfo.Instance.AddEvent(A_PassInfo.Instance.PASS_EVENT_NAME, Refresh);
 
         AddBtnListner();
@@ -132,7 +132,7 @@ public class A_PAGE_PASS : MonoBehaviour
 
     void SetSeason()
     {
-        // µ¥ÀÌÅÍµÚÁ®¼­ ÇöÀç½Ã°£¿¡ ¸Â´Â ½ÃÁğid¸¦ °¡Á®¿Í¾ßÇÑ´Ù.
+        // ë°ì´í„°ë’¤ì ¸ì„œ í˜„ì¬ì‹œê°„ì— ë§ëŠ” ì‹œì¦Œidë¥¼ ê°€ì ¸ì™€ì•¼í•œë‹¤.
         var passmain = ExcelParser.Read("PASS_TABLE-PASSMAIN");
 
         var nowdate = DateTime.Now;
@@ -150,7 +150,7 @@ public class A_PAGE_PASS : MonoBehaviour
             }
         }
 
-        // rewardList »Ì¾Æ¿À±â
+        // rewardList ë½‘ì•„ì˜¤ê¸°
         _seasonID = int.Parse(nowPassData["ID"].ToString());
     }
 
@@ -175,6 +175,7 @@ public class A_PAGE_PASS : MonoBehaviour
     void RefreshScroll(tabType type)
     {
         ResetScroll();
+
         switch (type)
         {
             case tabType.PASS:
@@ -197,7 +198,7 @@ public class A_PAGE_PASS : MonoBehaviour
         var passLevelTable = ExcelParser.Read("PASS_TABLE-PASSLEVEL");
         var rewardList = passreward.Values.Where(x => int.Parse(x["PASSMAIN_ID"].ToString()) == _seasonID).ToList();
 
-        // ÆĞ½ºº¸»óÀº ÃÖÁ¾º¸»óÀÌ Ç×»ó ÃÖ»ó´Ü¿¡ Ç¥½ÃµÇ±â ¶§¹®¿¡ ÀüºÎ Ç¥½Ã¸¦ ÇØ¼­´Â ¾ÈµË´Ï´Ù.
+        // íŒ¨ìŠ¤ë³´ìƒì€ ìµœì¢…ë³´ìƒì´ í•­ìƒ ìµœìƒë‹¨ì— í‘œì‹œë˜ê¸° ë•Œë¬¸ì— ì „ë¶€ í‘œì‹œë¥¼ í•´ì„œëŠ” ì•ˆë©ë‹ˆë‹¤.
         var count = rewardList.Count;
 
         int needAllPoint = 0;
@@ -211,14 +212,14 @@ public class A_PAGE_PASS : MonoBehaviour
 
             if (i > 0)
             { 
-                // ÇöÀç´Ü°è µµ´Ş±îÁö ÇÊ¿äÇÑ Æ÷ÀÎÆ®¸¦ ÀúÀåÇÑ´Ù.
+                // í˜„ì¬ë‹¨ê³„ ë„ë‹¬ê¹Œì§€ í•„ìš”í•œ í¬ì¸íŠ¸ë¥¼ ì €ì¥í•œë‹¤.
                 needAllPoint += needPoint;
             }
 
             if(A_PassInfo.Instance.Point < needAllPoint
                 && A_PassInfo.Instance.Point >= needAllPoint - needPoint)
             {
-                // ÇöÀç ÇÊ¿äÇÑ Æ÷ÀÎÆ® ÀúÀå¿ë.
+                // í˜„ì¬ í•„ìš”í•œ í¬ì¸íŠ¸ ì €ì¥ìš©.
                 _needBeforePoint = needAllPoint - needPoint;
                 nowLevelData = passLevelData;
             }
@@ -240,10 +241,38 @@ public class A_PAGE_PASS : MonoBehaviour
 
     void RefreshScrollMission()
     {
-        var passreward = ExcelParser.Read("MISSION_TABLE-MISSIONMAIN");
-        var rewardList = passreward.Values.Where(x => int.Parse(x["TYPE"].ToString()) == PASS_MISSION_TYPE).ToList();
+        var passreward = ExcelParser.Read("PASS_TABLE-PASSREWARD");
+        var passLevelTable = ExcelParser.Read("PASS_TABLE-PASSLEVEL");
+        var rewardList = passreward.Values.Where(x => int.Parse(x["PASSMAIN_ID"].ToString()) == _seasonID).ToList();
 
-        foreach (var it in rewardList)
+        var count = rewardList.Count;
+
+        int needAllPoint = 0;
+
+        for (int i = 0; i < count - 1; i++)
+        {
+            var it = rewardList[i];
+
+            var passLevelData = passLevelTable[it["PASSLEVEL_ID"].ToString()];
+            var needPoint = int.Parse(passLevelData["NEEDPOINT"].ToString());
+
+            if (i > 0)
+            {
+                needAllPoint += needPoint;
+            }
+
+            if (A_PassInfo.Instance.Point < needAllPoint
+                && A_PassInfo.Instance.Point >= needAllPoint - needPoint)
+            {
+                _needBeforePoint = needAllPoint - needPoint;
+                nowLevelData = passLevelData;
+            }
+        }
+
+        var missionreward = ExcelParser.Read("MISSION_TABLE-MISSIONMAIN");
+        var missionLIst = missionreward.Values.Where(x => int.Parse(x["TYPE"].ToString()) == PASS_MISSION_TYPE).ToList();
+
+        foreach (var it in missionLIst)
         {
             var missionItem = Resources.Load<GameObject>("A_PAGE_PASS_MISSIONITEM");
             var missionItemGO = Instantiate<GameObject>(missionItem);
@@ -265,19 +294,19 @@ public class A_PAGE_PASS : MonoBehaviour
 
     void RefreshBottomLayer()
     {
-        // ·¹º§
+        // ë ˆë²¨
         var levelstr = A_StringManager.Instance.GetString("ui_pass_005");
         levelstr = string.Format(levelstr, "");
         _lvText.text = "";
 
-        // Æ÷ÀÎÆ®
+        // í¬ì¸íŠ¸
         var pointstr = A_StringManager.Instance.GetString("ui_pass_006");
         var needPoint = _needBeforePoint + int.Parse(nowLevelData["NEEDPOINT"].ToString());
 
         pointstr = string.Format(pointstr, A_PassInfo.Instance.PointString, needPoint.ToString());
         _pointText.text = pointstr;
 
-        // °ÔÀÌÁö
+        // ê²Œì´ì§€
         var forGaugePercent = (float)A_PassInfo.Instance.Point / (float)needPoint;
         var sizey = _gaugeImg.rectTransform.sizeDelta.y;
         _gaugeImg.rectTransform.sizeDelta = new Vector2(GAUGE_SIZE_X * forGaugePercent, sizey);
@@ -308,7 +337,7 @@ public class A_PAGE_PASS : MonoBehaviour
 
     void ShowDiffReward(int level, bool isPremium)
     {
-        // ÁøÂ¥ ±ÍÂúÁö¸¸ ±×³É ³ë¸»º¸»ó¸¸ ÇÏ³ªÇÏ³ª Á¤¸®ÇØº¸ÀÚ...
+        // ì§„ì§œ ê·€ì°®ì§€ë§Œ ê·¸ëƒ¥ ë…¸ë§ë³´ìƒë§Œ í•˜ë‚˜í•˜ë‚˜ ì •ë¦¬í•´ë³´ì...
         List<string> rewardItemList = new List<string>();
 
         var beforeStep = isPremium == false ? A_PassInfo.Instance.NormalStep + 1 :
@@ -316,11 +345,11 @@ public class A_PAGE_PASS : MonoBehaviour
 
         var nowStep = level;
 
-        // beforeStep ~ nowStep ±îÁö È¹µæÃ³¸®¸¦ ÇØ¾ßÇÑ´Ù.
+        // beforeStep ~ nowStep ê¹Œì§€ íšë“ì²˜ë¦¬ë¥¼ í•´ì•¼í•œë‹¤.
         var passreward = ExcelParser.Read("PASS_TABLE-PASSREWARD");
         var passLevelTable = ExcelParser.Read("PASS_TABLE-PASSLEVEL");
 
-        // ½ÃÁğÀÌ °°°í ·¹º§ÀÌ »çÀÌ¿¡ÀÖ´Â ¾ÆÀÌÅÛID¸¦ °¡Á®¿Â´Ù.
+        // ì‹œì¦Œì´ ê°™ê³  ë ˆë²¨ì´ ì‚¬ì´ì—ìˆëŠ” ì•„ì´í…œIDë¥¼ ê°€ì ¸ì˜¨ë‹¤.
         if (isPremium == false)
         {
             rewardItemList = passreward.Values.
@@ -346,7 +375,7 @@ public class A_PAGE_PASS : MonoBehaviour
         A_POPUP_GETITEM.Open(rewardItemList);
     }
 
-    #region ¹öÆ° ¸®½º³Ê Ã³¸®
+    #region ë²„íŠ¼ ë¦¬ìŠ¤ë„ˆ ì²˜ë¦¬
     void OnClickClose()
     {
         _thispage.SetActive(false);
