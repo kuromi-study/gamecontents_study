@@ -74,7 +74,11 @@ public class PacketManager : MonoSingleton<PacketManager>
 
     public void MissionClearResponse(bool isClear)
     {
-        // 받은 미션처리여부 처리할것.
+        if(isClear == true)
+        {
+            // 받은 미션처리여부 처리할것.
+            A_PassInfo.Instance.BroadCastEvent(A_PassInfo.Instance.PASS_EVENT_NAME);
+        }
     }
 
     public void ErrorResponse(eErrorCode code)
