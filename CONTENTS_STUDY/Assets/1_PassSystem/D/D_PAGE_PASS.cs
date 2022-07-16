@@ -79,6 +79,8 @@ public class D_PAGE_PASS : MonoBehaviour
     {
         DateTime nowTime = DateTime.Now;
         var passMain =  ExcelParser.Read("PASS_TABLE-PASSMAIN");
+        //var passMain =  ExcelParser.Read("PASS_TABLE-PASSMAIN(_14Time)");
+        //var passMain =  ExcelParser.Read("PASS_TABLE-PASSMAIN(_NONEDATE)");
 
         foreach (var value in passMain)
         {
@@ -92,6 +94,7 @@ public class D_PAGE_PASS : MonoBehaviour
             {
                 // 패스 아이디 설정
                D_PassDataManager.Instance.passID = id;
+               Debug.Log("id");
                 // 패스 설명 설정
                 passDescription = description;
                 // 남은 시간 설정
@@ -105,6 +108,8 @@ public class D_PAGE_PASS : MonoBehaviour
     {
         this.gameObject.SetActive(false);
     }
+
+
     public void DownGetAllBtn()
     {
         Debug.Log("모든 보상 받기");
@@ -280,11 +285,11 @@ public class D_PASSREWARD
 
     public D_PASSREWARD(int passID_, int passLevel_ID_, int passLevel_, int normal_reward_ID_, int pass_reward_ID1_, int pass_reward_ID2_)
     {
-        this.passID = passID_;
-        this.passLevel_ID = passLevel_ID_;
-        this.passLevel = passLevel_;
-        this.normal_reward_ID = normal_reward_ID_;
-        this.pass_reward_ID1 = pass_reward_ID1_;
-        this.pass_reward_ID2 = pass_reward_ID2_;
+        passID = passID_;
+        passLevel_ID = passLevel_ID_;
+        passLevel = passLevel_;
+        normal_reward_ID = normal_reward_ID_;
+        pass_reward_ID1 = pass_reward_ID1_;
+        pass_reward_ID2 = pass_reward_ID2_;
     }
 }
