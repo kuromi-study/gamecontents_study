@@ -597,10 +597,12 @@ MonoBehaviour:
   _normalDimmed: {fileID: 1986754680696074386}
   _normalGetDimmed: {fileID: 7001692568085882745}
   _normalLockDimmed: {fileID: 7957380477730347072}
+  _passRewardBtn1: {fileID: 4313660345902609915}
   _passRewardImg1: {fileID: 4313660345902609914}
   _passDimmed1: {fileID: 4566421400888027083}
   _passGetDimmed1: {fileID: 5959149346564591895}
   _passLockDimmed1: {fileID: 2244268485917682973}
+  _passRewardBtn2: {fileID: 4313660345989722115}
   _passRewardImg2: {fileID: 4313660345989722114}
   _passDimmed2: {fileID: 8535098787972822012}
   _passGetDimmed2: {fileID: 3990199105838900547}

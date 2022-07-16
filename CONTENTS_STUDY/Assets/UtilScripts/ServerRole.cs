@@ -14,7 +14,7 @@ public class ServerRole : MonoSingleton<ServerRole>
         PacketManager.Instance.LoginResponse(_passPoint);
     }
 
-    public void PassRewardProcess(int step)
+    public void PassRewardProcess(int step, bool isPremium)
     {
         // 패스포인트 보상을 처리합니다.
         if(_passPoint == null)
@@ -23,7 +23,7 @@ public class ServerRole : MonoSingleton<ServerRole>
             return;
         }
 
-        SetPassStep(step);
+        SetPassStep(step, isPremium);
         PacketManager.Instance.PassRewardResponse(_passPoint);
     }
 
@@ -66,6 +66,18 @@ public class ServerRole : MonoSingleton<ServerRole>
         PacketManager.Instance.MissionClearResponse(isClear);
     }
 
+    public void PurchasePremium()
+    {
+        BuyPremium();
+        PacketManager.Instance.BuyPremiumResponse(_passPoint);
+    }
+
+    public void PurchaseLevel()
+    {
+        BuyLevel();
+        PacketManager.Instance.BuyLevelResponse(_passPoint);
+    }
+
     #region PassSet
     void InitPass()
     {
@@ -87,11 +99,12 @@ public class ServerRole : MonoSingleton<ServerRole>
         var randomStep = Random.Range(0, randomPoint / 100);
 
         _passPoint.Point = randomPoint;
-        _passPoint.Step = randomStep;
+        _passPoint.NormalStep = randomStep;
+        _passPoint.Premium = false;
         _passPoint.errorcode = eErrorCode.Success;
     }
 
-    void SetPassStep(int step)
+    void SetPassStep(int step, bool isPremium = false)
     {
         // 임의로 1/10확률로 Fail발생
         var forErrorCode = Random.Range(0, 10);
@@ -102,14 +115,21 @@ public class ServerRole : MonoSingleton<ServerRole>
             return;
         }
 
-        if(_passPoint.Step > step)
+        if(_passPoint.NormalStep > step)
         {
             // 이미 클리어한 스텝입니다.
             _passPoint.errorcode = eErrorCode.ValueError;
             return;
         }
 
-        _passPoint.Step = step;
+        if (isPremium == false)
+        {
+            _passPoint.NormalStep = step;
+        }
+        else
+        {
+            _passPoint.PassStep = step;
+        }
         _passPoint.errorcode = eErrorCode.Success;
     }
 
@@ -127,6 +147,16 @@ public class ServerRole : MonoSingleton<ServerRole>
         _passPoint.Point += point;
         _passPoint.errorcode = eErrorCode.Success;
     }
+
+    void BuyPremium()
+    {
+        _passPoint.Premium = true;
+    }
+
+    void BuyLevel()
+    {
+        _passPoint.Point += 200;
+    }
     #endregion
 }
 
@@ -135,11 +165,16 @@ public class ServerRole : MonoSingleton<ServerRole>
 public class PassPoint
 {
     public int Point { get => _point; set => _point = value; }
-    public int Step { get => _step; set => _step = value; }
+    public int NormalStep { get => _normalStep; set => _normalStep = value; }
+    public int PassStep { get => _passStep; set => _passStep = value; }
+
+    public bool Premium { get => _premium; set => _premium = value; }
     public eErrorCode errorcode;
 
     int _point;
-    int _step;
+    int _normalStep;
+    int _passStep;
+    bool _premium;
 }
 
 public enum eErrorCode
