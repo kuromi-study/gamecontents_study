@@ -1,4 +1,4 @@
-uint,uint,string,#
+uint,uint,string,string
 ID,COUNT,STRINGKEY,DESCRIPTION
 1,1,pass_mission_001,로그인
 2,5,pass_mission_002,게임플레이
