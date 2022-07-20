@@ -140,6 +140,5 @@ public class D_PAGE_PASS_MISSIONITEM : MonoBehaviour
 
         // 이미지 딤드 처리
         dimmedImg.SetActive(true);
-
     }
 }

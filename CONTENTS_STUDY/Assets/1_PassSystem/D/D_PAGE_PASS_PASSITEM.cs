@@ -25,7 +25,15 @@ public class D_PAGE_PASS_PASSITEM : MonoBehaviour
     public int needPoint;
     public D_PASSREWARD data { get; private set; }
     public D_PASSSYSTEM passSystem;
-
+    private void Awake()
+    {
+        normal_type = ItemType.none;
+        pass1_type = ItemType.none;
+        pass2_type = ItemType.none;
+        normal_dimmed = false;
+        pass1_dimmed = false;
+        pass2_dimmed = false;
+    }
     public void Init(D_PASSREWARD data_,int needPoint_,D_PASSSYSTEM passSystem_)
     {
         data = data_;
@@ -33,10 +41,8 @@ public class D_PAGE_PASS_PASSITEM : MonoBehaviour
         passLevel = data.passLevel;
         passSystem = passSystem_;
         passLevelTXT.text = string.Format(D_StringkeyManager.Instance.GetString("ui_pass_005"), data.passLevel.ToString());
-        if (D_PassDataManager.Instance.curLevel >= passLevel)
-            passLevelTXT.color = new Color(1, 1, 1);
-        else
-            passLevelTXT.color = new Color(0, 0, 0);
+
+        
 
         // 이미지
         if (data.normal_reward_ID != 0)
@@ -50,10 +56,24 @@ public class D_PAGE_PASS_PASSITEM : MonoBehaviour
             rewardPass2Img.sprite = Resources.Load<Sprite>(D_PassDataManager.Instance.GetRewardMainData(data.pass_reward_ID2).IMAGEPATH);
         else
             rewardPass2Img.gameObject.SetActive(false);
+
         needPoint = needPoint_;
 
-        SetRewardState();
+        UpdatePassLevel();
+
+        //SetRewardState();
+
         // 현재 진행중인 보상이 자동 스크롤 되도록
+    }
+
+    public void UpdatePassLevel()
+    {
+        if (D_PassDataManager.Instance.curLevel >= passLevel)
+            passLevelTXT.color = new Color(1, 1, 1);
+        else
+            passLevelTXT.color = new Color(0, 0, 0);
+
+        SetRewardState();
     }
 
     public void SetRewardState()
@@ -74,7 +94,7 @@ public class D_PAGE_PASS_PASSITEM : MonoBehaviour
         int curLevel = D_PassDataManager.Instance.curLevel;
 
         // 현재 필요한 포인트보다 보유한 포인트가 낮은 경우
-        if (needPoint > curPoint+100)
+        if (needPoint >= curPoint)
         {
             normal_dimmed = true;
             normal_type = ItemType.locked;

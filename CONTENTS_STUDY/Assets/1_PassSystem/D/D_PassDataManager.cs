@@ -15,15 +15,27 @@ public class D_PassDataManager : MonoSingleton<D_PassDataManager>
     public int curPoint = 0;
     public int maxPoint = 0;
     public int passID = 0;
-    public int CheckedLevel { get; private set; }
+    public int CheckedLevel = 0;
+    public int CheckedRewardLevel = 0;
 
     // 획득한 아이템 리스트
     // ======
-    
+
     Dictionary<int, D_REWARDMAIN> checkedItemList = new Dictionary<int, D_REWARDMAIN>();
     int index = 0;
     public Dictionary<int, D_REWARDMAIN> GetItemList() { return checkedItemList; }
 
+
+    private void Awake()
+    {
+        SetRandomValue();
+
+        ReadPassLevel();
+        ReadRewardmain();
+        ReadMissionData();
+    }
+
+    #region ItemList
     public void AddList(D_REWARDMAIN item)
     {
         checkedItemList.Add(index,item);
@@ -31,29 +43,38 @@ public class D_PassDataManager : MonoSingleton<D_PassDataManager>
         Debug.Log("아이템 개수 :" + index);
     }
 
+    // 패스 갱신 시 아이템 리스트 지우기
+    public void ClearItemList()
+    {
+        checkedItemList.Clear();
+    }
 
-    private void Awake()
+    #endregion
+
+    public void SetRandomValue()
     {
         // 현재 레벨 랜덤 설정
         curLevel = Random.Range(1, 9);
         //curLevel = 8;
-        Debug.Log("현재 레벨: "+curLevel);
+        Debug.Log("현재 레벨: " + curLevel);
         //획득한 레벨
         CheckedLevel = Random.Range(0, curLevel);
         //CheckedLevel = 2;
         Debug.Log("획득한 레벨: " + CheckedLevel);
+        // 보상 레벨
+        CheckedRewardLevel = Random.Range(0, CheckedLevel);
+        Debug.Log("보상 획득한 레벨: " + CheckedRewardLevel);
 
-        ReadPassLevel();
-        ReadRewardmain();
-        ReadMissionData();
     }
+
+
 
 
     // 현재 레벨 구하기
 
 
     // =================== PASSLEVEL =================== //
-    private void ReadPassLevel()
+    public void ReadPassLevel()
     {
         var passLevel = ExcelParser.Read("PASS_TABLE-PASSLEVEL");
 
@@ -114,8 +135,6 @@ public class D_PassDataManager : MonoSingleton<D_PassDataManager>
     {
         return missionTypeData[id];
     }
-
-
   
 
 
