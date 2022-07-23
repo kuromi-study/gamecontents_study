@@ -6,6 +6,7 @@ namespace UnityEngine.UI.Extensions
 {
     public static class A_UI_Extension
     {
+        #region TextUtil
         public static void SetTextWithStringKey(this Text txt, string key)
         {
             if (txt == null)
@@ -71,5 +72,46 @@ namespace UnityEngine.UI.Extensions
                 txt.text = remainStr;
             }
         }
+        #endregion
+
+        #region scrollRectUtil
+        public static void SetScrollTo(this ScrollRect rect, int index)
+        {
+            // 목표지점 위치 저장할곳
+            float indexPos = 0;
+
+            // 스크롤 아이템들이 저장되는곳
+            var content = rect.content.transform;
+            // 스크롤 아이템 사이 간격
+            var spacing = rect.content.GetComponent<HorizontalOrVerticalLayoutGroup>().spacing;
+            // 원래는 스크롤 padding까지 확인되어야하나 패스..
+
+            for (int i = 0; i<index;i++)
+            {
+                var child = content.GetChild(i);
+
+                // 해당 스크롤의 자식들의 크기 및 간격을 더해서 위치를 구함.
+                indexPos += child.GetComponent<RectTransform>().rect.height;
+                indexPos += spacing;
+            }
+
+            // 목표 위치 / 전체 스크롤의 크기
+            // 출처 : https://mean-dragon.tistory.com/14
+            var targetPos = indexPos / (rect.content.rect.height - rect.GetComponent<RectTransform>().rect.height);
+            
+                // 위치를 설정한다.
+            Vector2 targetV2 = Vector2.zero;
+            if(rect.vertical == true)
+            {
+                targetV2 = new Vector2(0, targetPos);
+            }
+            else
+            {
+                targetV2 = new Vector2(targetPos, 0);
+            }
+
+            rect.normalizedPosition = targetV2;
+        }
+        #endregion
     }
 }
