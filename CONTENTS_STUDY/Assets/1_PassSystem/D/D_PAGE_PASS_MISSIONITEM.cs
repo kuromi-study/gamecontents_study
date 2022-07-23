@@ -17,7 +17,9 @@ public class D_PAGE_PASS_MISSIONITEM : MonoBehaviour
     int count;
     int defaultCount = 0;
 
-    D_MISSIONITEM data;
+    public D_MISSIONITEM data { get; private set; }
+    bool activeMissionItem = false;
+    public TimeSpan remainTimeSapn { get; private set; }
 
     public void Init(D_MISSIONITEM data_)
     {
@@ -88,9 +90,9 @@ public class D_PAGE_PASS_MISSIONITEM : MonoBehaviour
 
         switch (data.dateType)
         {
-            case 0: { temp = dayLimit - nowTime; } break;
-            case 1: { temp = weekLimit - nowTime; } break;
-            case 2: { temp = monthLimit - nowTime; } break;
+            case 0: { temp = remainTimeSapn = dayLimit - nowTime; } break;
+            case 1: { temp = remainTimeSapn = weekLimit - nowTime; } break;
+            case 2: { temp = remainTimeSapn = monthLimit - nowTime; } break;
             case 3: { return ""; }
         }
 
@@ -109,26 +111,34 @@ public class D_PAGE_PASS_MISSIONITEM : MonoBehaviour
 
         // 갱신
         if ((int)temp.TotalSeconds <= 0)
-            count = defaultCount;
+        {
+            activeMissionItem = false;
+            dimmedImg.SetActive(true);
+        }
+           // count = defaultCount;
 
         return str;
     }
 
 
-    public void UpdaateMissionCount()
+    public void UpdateMissionCount()
     {
         Debug.Log("임무수행완료");
-        if(count>0)
+        if (count > 0)
             count--;
+       
+        if(count<= 0)
+            activeMissionItem = true;
 
         countTXT.text = string.Format(D_StringkeyManager.Instance.GetString("ui_pass_008"), count);
     }
 
     public void DownGetRewardBtn()
     {
-        Debug.Log("보상 받기 버튼");
 
         if (count > 0) return;
+        if (!activeMissionItem) return;
+        Debug.Log("보상 받기 버튼");
 
         // 획득한 아이템 리스트에 추가
         D_PassDataManager.Instance.AddList(D_PassDataManager.Instance.GetRewardMainData(data.rewardID));
@@ -140,5 +150,6 @@ public class D_PAGE_PASS_MISSIONITEM : MonoBehaviour
 
         // 이미지 딤드 처리
         dimmedImg.SetActive(true);
+        activeMissionItem = false;
     }
 }

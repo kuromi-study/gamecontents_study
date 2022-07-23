@@ -10,12 +10,13 @@ public class D_PASSSYSTEM : MonoBehaviour
     [SerializeField] GameObject scrollview;
     D_PAGE_PASS pagePass;
 
-    List<GameObject> levelList = new List<GameObject>();
+    public List<GameObject> levelList = new List<GameObject>();
 
     private void Awake()
     {
         pagePass = this.GetComponent<D_PAGE_PASS>();
     }
+
 
     // 생성
     public void OpenPassSystem()
@@ -33,7 +34,6 @@ public class D_PASSSYSTEM : MonoBehaviour
             if (id == D_PassDataManager.Instance.passID)
             {
                 count++;
-                //PASSREWARD temp = { int.Parse(i.Value["PASSLEVEL_ID"].ToString(), )
                 int passLevel_id = int.Parse(i.Value["PASSLEVEL_ID"].ToString());
                 int passLevel_level = D_PassDataManager.Instance.GetPassLevelData(passLevel_id).LEVEL;
                 int normal_reward_id = int.Parse(i.Value["NORMAL_REWARD_ID"].ToString());
@@ -54,7 +54,7 @@ public class D_PASSSYSTEM : MonoBehaviour
 
         for (int i = 1; i < count-1; i++)
         {
-            points.Add(points[i-1]+ D_PassDataManager.Instance.GetPassLevelData(data[i+1].passLevel_ID).NEEDPOINT);
+            points.Add(points[i-1]+ D_PassDataManager.Instance.GetPassLevelData(data[i+2].passLevel_ID).NEEDPOINT);
         }
 
         points.Add(points[count-2]);
@@ -73,21 +73,24 @@ public class D_PASSSYSTEM : MonoBehaviour
             D_PassDataManager.Instance.curPoint = Random.Range(D_PassDataManager.Instance.GetPassLevelData(levelID).NEEDPOINT, points[curPassLevel - 1] - 1);
         }
 
-
         D_PASSSYSTEM passSystem = this.GetComponent<D_PASSSYSTEM>();
-        
+
+        // firstReward
+        GameObject instance__ = Instantiate<GameObject>(prefab, scrollview.transform);
+        instance__.GetComponent<D_PAGE_PASS_PASSITEM>().Init(data[1], points[0], D_PassDataManager.Instance.GetPassLevelData(data[1].passLevel_ID).NEEDPOINT,passSystem);
+        levelList.Add(instance__);
+
         // PASSITEM 생성
-        for (int i = 1; i < count; i++)
+        for (int i = 2; i < count; i++)
         {
             GameObject instance_ = Instantiate<GameObject>(prefab, scrollview.transform);
-           instance_.GetComponent<D_PAGE_PASS_PASSITEM>().Init(data[i], points[i - 1], passSystem);
-            Debug.Log("Level : "+i+" ,POINT : "+ points[i-1]);
+           instance_.GetComponent<D_PAGE_PASS_PASSITEM>().Init(data[i], points[i - 1], points[i - 2], passSystem);
             levelList.Add(instance_);
         }
 
         // EndReward
         GameObject instance = Instantiate<GameObject>(prefab, scrollview.transform.parent.parent.GetChild(0));
-        instance.GetComponent<D_PAGE_PASS_PASSITEM>().Init(data[count], points[count - 1], passSystem);
+        instance.GetComponent<D_PAGE_PASS_PASSITEM>().Init(data[count], points[count - 1], points[count - 1], passSystem);
         levelList.Add(instance);
 
         scrollview.SetActive(true);
@@ -106,38 +109,38 @@ public class D_PASSSYSTEM : MonoBehaviour
             i.SetActive(false);
     }
 
-    public void GetAllReward(int level)
+    public void GetAllReward()
     {
         if (D_PassDataManager.Instance.curLevel - 1 < D_PassDataManager.Instance.CheckedLevel)
             return;
+        Debug.Log(D_PassDataManager.Instance.curLevel + " ; " + D_PassDataManager.Instance.CheckedLevel);
+        D_PassDataManager.Instance.CheckedLevel = D_PassDataManager.Instance.curLevel;
 
         foreach (var i in levelList)
         {
             D_PAGE_PASS_PASSITEM sc = i.GetComponent<D_PAGE_PASS_PASSITEM>();
-            if (!sc.normal_dimmed)
-                sc.GetNormalReward();
+            sc.GetNormalReward();
         }
-
-        GameObject prefab = Resources.Load<GameObject>("D_POPUP_GETITEM");
-        GameObject popup = Instantiate<GameObject>(prefab, GameObject.Find("Canvas").transform);
-        popup.GetComponent<D_POPUP_GETITEM>().UpdateList(level);
+        ShowGetItemPopup(D_PassDataManager.Instance.CheckedLevel);
     }
 
+    
     public void GetReward(int level)
     {
+        // 6 
+        Debug.Log(D_PassDataManager.Instance.curLevel + " ; " + D_PassDataManager.Instance.CheckedLevel);
         if (D_PassDataManager.Instance.curLevel - 1 < D_PassDataManager.Instance.CheckedLevel)
             return;
-
         foreach (var i in levelList)
         {
             D_PAGE_PASS_PASSITEM sc = i.GetComponent<D_PAGE_PASS_PASSITEM>();
             if (sc.data.passLevel <= level && sc.data.passLevel > D_PassDataManager.Instance.CheckedLevel)
+            {
+                D_PassDataManager.Instance.CheckedLevel = sc.data.passLevel;
                 sc.GetNormalReward();
+            }
         }
-
-        GameObject prefab = Resources.Load<GameObject>("D_POPUP_GETITEM");
-        GameObject popup = Instantiate<GameObject>(prefab, GameObject.Find("Canvas").transform);
-        popup.GetComponent<D_POPUP_GETITEM>().UpdateList(level);
+        ShowGetItemPopup(level);
     }
 
     public void ResetPassSystem()
@@ -151,7 +154,6 @@ public class D_PASSSYSTEM : MonoBehaviour
             Destroy(obj);
         }
         levelList.Clear();
-
         OpenPassSystem();
     }
 
@@ -159,18 +161,45 @@ public class D_PASSSYSTEM : MonoBehaviour
     {
         // 현재 포인트 다시 설정
         D_PassDataManager.Instance.curPoint = 
-            levelList[D_PassDataManager.Instance.curLevel-1].GetComponent<D_PAGE_PASS_PASSITEM>().needPoint;
+            levelList[D_PassDataManager.Instance.curLevel-1].GetComponent<D_PAGE_PASS_PASSITEM>().needAllPoint;
+
+        Debug.Log("needAllPoint : "+levelList[D_PassDataManager.Instance.curLevel - 1].GetComponent<D_PAGE_PASS_PASSITEM>().needAllPoint);
+        
         // 레벨 업
         D_PassDataManager.Instance.curLevel++;
-        int curPassLevel = D_PassDataManager.Instance.curLevel;
+
+        int curPassLevel = D_PassDataManager.Instance.curLevel-1;
+       
         // 맥스 포인트 다시 설정
         D_PassDataManager.Instance.maxPoint = 
-            levelList[curPassLevel - 1].GetComponent<D_PAGE_PASS_PASSITEM>().needPoint;
-
+            levelList[curPassLevel].GetComponent<D_PAGE_PASS_PASSITEM>().needAllPoint;
+        
         // 업데이트된 레벨 텍스트 바꾸기
-        levelList[curPassLevel - 1].GetComponent<D_PAGE_PASS_PASSITEM>().UpdatePassLevel();
-        // 딤드 처리 풀기
+         levelList[curPassLevel].GetComponent<D_PAGE_PASS_PASSITEM>().UpdatePassLevel();
 
+        Debug.Log(D_PassDataManager.Instance.curLevel);
+    }
+
+    public bool DownBuyPassBtn()
+    {
+        int curlevel = D_PassDataManager.Instance.curLevel-1;
+
+        if (!levelList[curlevel].GetComponent<D_PAGE_PASS_PASSITEM>().bActivePassReward)
+        {
+            levelList[curlevel].GetComponent<D_PAGE_PASS_PASSITEM>().BuyPass();
+            Debug.Log("패스 구매 완료");
+            return true;
+        }
+        Debug.Log("패스 구매 불가");
+
+        return false;
+    }
+
+    private void ShowGetItemPopup(int level)
+    {
+        GameObject prefab = Resources.Load<GameObject>("D_POPUP_GETITEM");
+        GameObject popup = Instantiate<GameObject>(prefab, GameObject.Find("Canvas").transform);
+        popup.GetComponent<D_POPUP_GETITEM>().UpdateList(level);
     }
 }
 

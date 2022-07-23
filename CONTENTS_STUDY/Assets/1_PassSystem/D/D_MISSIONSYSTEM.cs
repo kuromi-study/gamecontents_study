@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public struct D_MISSIONITEM
 {
@@ -12,6 +13,7 @@ public struct D_MISSIONITEM
         rewardID = rewardID_;
     }
 }
+
 public class D_MISSIONSYSTEM : MonoBehaviour
 {
     [SerializeField] GameObject scrollview;
@@ -54,9 +56,87 @@ public class D_MISSIONSYSTEM : MonoBehaviour
             missionList.Add(instance_);
         }
         
-        
         scrollview.SetActive(false);
     }
+
+    #region cheatsheet
+
+    private void CheatFunc( int index)
+    {
+        foreach (var i in missionList)
+        {
+            D_PAGE_PASS_MISSIONITEM sc = i.GetComponent<D_PAGE_PASS_MISSIONITEM>();
+            if (sc.data.missionTypeID == index)
+            {
+                sc.UpdateMissionCount();
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("로그인");
+            CheatFunc(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Debug.Log("게임 플레이");
+            CheatFunc(2);
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            Debug.Log("뽑기");
+            CheatFunc(3);
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            Debug.Log("강화공격");
+            CheatFunc(4);
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            Debug.Log("강화실패");
+            CheatFunc(5);
+
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            Debug.Log("아이템 구매");
+            CheatFunc(6);
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            Debug.Log("아이템 판매");
+            CheatFunc(7);
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+        {
+            Debug.Log("골드 소모");
+            CheatFunc(8);
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+        {
+            Debug.Log("다이아 소모");
+            CheatFunc(9);
+
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            Debug.Log("미션완료");
+            CheatFunc(10);
+
+        }
+    }
+    #endregion
 
     public void ActiveSystem()
     {
@@ -74,5 +154,20 @@ public class D_MISSIONSYSTEM : MonoBehaviour
         {
             i.SetActive(false);
         }
+    }
+
+
+    public TimeSpan GetMinTime()
+    {
+        TimeSpan remaintimespan = missionList[0].GetComponent<D_PAGE_PASS_MISSIONITEM>().remainTimeSapn;
+
+        foreach (var i in missionList)
+        {
+            D_PAGE_PASS_MISSIONITEM sc = i.GetComponent<D_PAGE_PASS_MISSIONITEM>();
+
+            if (remaintimespan > sc.remainTimeSapn && sc.data.dateType !=3 )
+                remaintimespan = i.GetComponent<D_PAGE_PASS_MISSIONITEM>().remainTimeSapn;
+        }
+        return remaintimespan;
     }
 }
