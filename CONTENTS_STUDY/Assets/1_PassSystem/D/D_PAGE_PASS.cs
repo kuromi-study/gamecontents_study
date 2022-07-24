@@ -76,7 +76,7 @@ public class D_PAGE_PASS : MonoBehaviour
         UpdatePoint();
         UpdateLevel();
     }
-
+    #region Update
     private void UpdatePoint()
     {
         // 포인트 설정
@@ -89,6 +89,8 @@ public class D_PAGE_PASS : MonoBehaviour
     {
         levelTXT.text = string.Format(D_StringkeyManager.Instance.GetString("ui_pass_005"), D_PassDataManager.Instance.curLevel);
     }
+    #endregion
+
 
     public void SetPassID()
     {
