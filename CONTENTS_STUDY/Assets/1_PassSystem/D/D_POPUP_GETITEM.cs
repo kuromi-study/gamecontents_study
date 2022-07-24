@@ -14,7 +14,7 @@ public class D_POPUP_GETITEM : MonoBehaviour
         desriptionTXT.text = D_StringkeyManager.Instance.GetString("ui_pass_009");
     }
 
-    // 아이템 획득한 경우 획득한 아이템 리스트 업데이트
+    // 패스 보상일때
     public void UpdateList()
     {
         var list = D_PassDataManager.Instance.GetItemList();
@@ -24,10 +24,12 @@ public class D_POPUP_GETITEM : MonoBehaviour
             GameObject prefab = Resources.Load<GameObject>("D_ITEM_IMAGE");
             GameObject instance = Instantiate<GameObject>(prefab, scrolllview.transform);
             instance.GetComponent<Image>().sprite = Resources.Load<Sprite>(list[i].IMAGEPATH);
+            Debug.Log(list[i].IMAGEPATH);
         }
         Debug.Log("UpdateList");
-
     }
+
+    // 노말 보상일때
     public void UpdateList(int level)
     {
       var list = D_PassDataManager.Instance.GetItemList();

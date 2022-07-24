@@ -32,20 +32,26 @@ public class D_PAGE_PASS : MonoBehaviour
     D_PASSSYSTEM passSystem;
     D_MISSIONSYSTEM missionSystem;
 
-    bool bIsPassPossible = true;
+    bool bIsPassPossible = true; // ??????
 
     public Dictionary<int, D_PASSLEVEL> passLevelData = new Dictionary<int, D_PASSLEVEL>();
-    public Dictionary<int, D_REWARDMAIN> rewardmainData = new Dictionary<int, D_REWARDMAIN>(); // id
+    public Dictionary<int, D_REWARDMAIN> rewardmainData = new Dictionary<int, D_REWARDMAIN>();
 
-
-    private void OnEnable()
+    private void Awake()
     {
         //  패스 시스템 오픈
         OpenPagePass();
-        // 코루틴
-        StartCoroutine(SetRemainTime());
+        missionSystem.InactiveSystem();
+
     }
 
+    private void OnEnable()
+    {
+        // 코루틴
+        StartCoroutine(SetRemainTime());
+
+       // StartCoroutine( AutoScroll());
+    }
     private void OpenPagePass()
     {
         SetPassID();
@@ -64,12 +70,13 @@ public class D_PAGE_PASS : MonoBehaviour
 
         // 패스탭, 미션탭 생성
         passSystem.OpenPassSystem();
+        // 처음 Page_Pass열렸을 때
         missionSystem.OpenMissionSystem();
 
         UpdatePoint();
         UpdateLevel();
     }
-
+    #region Update
     private void UpdatePoint()
     {
         // 포인트 설정
@@ -82,20 +89,9 @@ public class D_PAGE_PASS : MonoBehaviour
     {
         levelTXT.text = string.Format(D_StringkeyManager.Instance.GetString("ui_pass_005"), D_PassDataManager.Instance.curLevel);
     }
+    #endregion
 
-    /*
-    private void UpdateLevelUp()
-    {
-        D_PassDataManager.Instance.curLevel++;
-        // 레벨 설정
-        levelTXT.text = string.Format(D_StringkeyManager.Instance.GetString("ui_pass_005"), D_PassDataManager.Instance.curLevel);
 
-    }
-    */
-  
-    // PASS ID가 0개 일 경우 아무런 반응X
-    // 1개 일 경우 패스 시스템을 연다
-    // 2개 일 경우 에러 발생
     public void SetPassID()
     {
         DateTime nowTime = DateTime.Now;
@@ -130,7 +126,6 @@ public class D_PAGE_PASS : MonoBehaviour
             }
             else // 0. 예외처리 해주기
             {
-                Debug.Log("현재 진행 중인 패스가 없으므로, 예외처리 해주기");
                 bIsPassPossible = false;
             }
         }
@@ -138,17 +133,30 @@ public class D_PAGE_PASS : MonoBehaviour
         // 1. 예외처리해주기
         if (count > 1)
         {
-            Debug.Log("해당되는 패스가 두개 이므로 예외처리 해주기");
             bIsPassPossible = false;
         }
         else { bIsPassPossible = true; }
+
+
+      
     }
 
 
+    [Range(0,1)]
+    public float test;
+    IEnumerator AutoScroll()
+    {
+        yield return new WaitForSeconds(0.5f);
+        scrollview.verticalNormalizedPosition = test;
+    }
+
+
+    #region DownButton
     public void DownBackBtn()
     {
         Debug.Log("뒤로가기");
         this.gameObject.SetActive(false);
+        //Destroy(this.gameObject);
     }
 
 
@@ -158,7 +166,7 @@ public class D_PAGE_PASS : MonoBehaviour
         if (D_PassDataManager.Instance.curLevel == D_PassDataManager.Instance.CheckedLevel)
             return;
 
-        passSystem.GetAllReward(D_PassDataManager.Instance.curLevel);
+        passSystem.GetAllReward();
     }
 
 
@@ -174,6 +182,7 @@ public class D_PAGE_PASS : MonoBehaviour
     // 패스 구매하기 -> 패스 리워드 살 수 있음
     public void DownBuyPassBtn()
     {
+        if (!passSystem.DownBuyPassBtn()) return;
         Debug.Log("패스 구매하기");
 
         GameObject prefab = Resources.Load<GameObject>("D_POPUP_BUYBASE");
@@ -194,6 +203,7 @@ public class D_PAGE_PASS : MonoBehaviour
         UpdateLevel();
         UpdatePoint();
     }
+    #endregion
 
     #region UpdateRemainTime
 
@@ -204,49 +214,67 @@ public class D_PAGE_PASS : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
 
-            remainTimeTXT.text = GetRemainTime();
+            if (MissionTab_)
+            {
+               if (missionSystem.GetMinTime().TotalSeconds < remaintimespan.TotalSeconds)
+                    remainTimeTXT.text = GetTimeStr(missionSystem.GetMinTime());
+                else
+                    remainTimeTXT.text = GetRemainTime();
+            }
+            else
+                remainTimeTXT.text = GetRemainTime();
+
         }
     }
+    TimeSpan remaintimespan;
 
     string GetRemainTime()
     {
         DateTime nowTime = DateTime.Now;
         string str = D_StringkeyManager.Instance.GetString("ui_pass_002");
 
-        TimeSpan remaintime = endTime - nowTime;
+        TimeSpan remaintime = remaintimespan = endTime - nowTime;
 
-        if ((int)remaintime.TotalDays > 0f)
-            return string.Format(str, (int)remaintime.TotalDays,"일");
+        return GetTimeStr(remaintime);
+    }
 
-        if ((int)remaintime.TotalHours > 0f)
-            return string.Format(str, (int)remaintime.TotalHours, "시간");
+    private string GetTimeStr(TimeSpan timesapn)
+    {
+        string str = D_StringkeyManager.Instance.GetString("ui_pass_002");
 
-        if ((int)remaintime.TotalMinutes > 0f)
-            return string.Format(str, (int)remaintime.TotalMinutes, "분");
+        if ((int)timesapn.TotalDays > 0f)
+            return string.Format(str, (int)timesapn.TotalDays, "일");
 
-        if ((int)remaintime.TotalSeconds > 0f)
-            return string.Format(str, (int)remaintime.TotalSeconds, "초");
+        if ((int)timesapn.TotalHours > 0f)
+            return string.Format(str, (int)timesapn.TotalHours, "시간");
 
-        if ((int)remaintime.TotalSeconds <= 0f)
+        if ((int)timesapn.TotalMinutes > 0f)
+            return string.Format(str, (int)timesapn.TotalMinutes, "분");
+
+        if ((int)timesapn.TotalSeconds > 0f)
+            return string.Format(str, (int)timesapn.TotalSeconds, "초");
+
+        if ((int)timesapn.TotalSeconds <= 0f)
         {
             StartCoroutine(UpdatePass());
             Debug.Log("패스 갱신 시작");
         }
 
-        return string.Format(str,"","");
+        return string.Format(str, "", "");
     }
 
     IEnumerator UpdatePass()
     {
         // 랜덤 다시 설정
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.2f);
         
         // 날짜에 알맞는 패스 아이디 다시 갱신
         SetPassID();
         // 현재 레벨, 획득한 레벨, 보상 획득 레벨 랜덤으로 주기
         D_PassDataManager.Instance.SetRandomValue();
         // 아이템 리스트 리셋
-        D_PassDataManager.Instance.ClearItemList();
+        //D_PassDataManager.Instance.ClearItemList();
+        D_PassDataManager.Instance.ResetPass();
         // 패스아이디에 맞는 패스 아이템 다시 생성
         passSystem.ResetPassSystem();
         // 레벨
@@ -275,17 +303,17 @@ public class D_PAGE_PASS : MonoBehaviour
     public void DownPassTab()
     {
         if (passScrollView.isStatic) return;
-
+        MissionTab_ = false;
         scrollview.content = passScrollView.GetComponent<RectTransform>();
         scrollview.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(950f,480f);
         passSystem.ActivePassSystem();
         missionSystem.InactiveSystem();
     }
-
+    bool MissionTab_ = false;
     public void DownMissionTab()
     {
         if (missionScrollView.isStatic) return;
-
+        MissionTab_ = true;
         scrollview.content = missionScrollView.GetComponent<RectTransform>();
         scrollview.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(950f, 600f);
         missionSystem.ActiveSystem();
@@ -295,73 +323,3 @@ public class D_PAGE_PASS : MonoBehaviour
     
 }
 
-public class D_REWARDMAIN
-{
-    public int ID, NUM;
-    public string IMAGEPATH,STRINGKEY;
-    public D_REWARDMAIN(int ID_,int NUM_, string IMAGEPATH_,string STRINGKEY_)
-    {
-        ID = ID_;
-        NUM = NUM_;
-        IMAGEPATH = IMAGEPATH_;
-        STRINGKEY = STRINGKEY_;
-    }
-}
-
-
-public class D_PASSITEM
-{
-    public int ID;
-    public string DESCRIPTION;
-    public long STARTDATE;
-    public long ENDDATE;
-
-    public D_PASSITEM(int ID_, string DESCRIPTION_, long STARTDATE_, long ENDDATE_)
-    {
-        ID = ID_;
-        DESCRIPTION = DESCRIPTION_;
-        STARTDATE = STARTDATE_;
-        ENDDATE = ENDDATE_;
-    }
-}
-
-
-public class D_PASSLEVEL
-{
-    public int LEVEL, NEEDPOINT;
-
-    public D_PASSLEVEL(int LEVEL_, int NEEDPOINT_)
-    {
-        NEEDPOINT = NEEDPOINT_;
-        LEVEL = LEVEL_;
-    }
-}
-
-
-    public class D_MISSIONTYPE
-    {
-        public int ID, COUNT;
-        public string STRINGKEY, DESCRIPTION;
-        public D_MISSIONTYPE(int ID_, int COUNT_, string STRINGKEY_, string DESCRIPTION_)
-        {
-            ID = ID_;
-            COUNT = COUNT_;
-            STRINGKEY = STRINGKEY_;
-            DESCRIPTION = DESCRIPTION_;
-        }
-    }
-
-public class D_PASSREWARD
-{
-    public int passID, passLevel_ID, passLevel, normal_reward_ID, pass_reward_ID1, pass_reward_ID2;
-
-    public D_PASSREWARD(int passID_, int passLevel_ID_, int passLevel_, int normal_reward_ID_, int pass_reward_ID1_, int pass_reward_ID2_)
-    {
-        passID = passID_;
-        passLevel_ID = passLevel_ID_;
-        passLevel = passLevel_;
-        normal_reward_ID = normal_reward_ID_;
-        pass_reward_ID1 = pass_reward_ID1_;
-        pass_reward_ID2 = pass_reward_ID2_;
-    }
-}
