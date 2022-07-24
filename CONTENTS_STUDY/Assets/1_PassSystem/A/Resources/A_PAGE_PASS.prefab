@@ -2434,6 +2434,8 @@ MonoBehaviour:
   _pointText: {fileID: 673912816075950033}
   _gaugeImg: {fileID: 1254316172894724362}
   _getAllBtn: {fileID: 22006757904057817}
+  index: 0
+  rect: {fileID: 6066462947771160428}
 --- !u!1 &6066462947873801084
 GameObject:
   m_ObjectHideFlags: 0

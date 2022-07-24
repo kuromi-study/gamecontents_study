@@ -400,5 +400,13 @@ public class A_PAGE_PASS : MonoBehaviour
     {
 
     }
+
+    [Header("자동스크롤기능테스트")]
+    [SerializeField] private int index;
+    [SerializeField] private ScrollRect rect;
+    public void SetScrollView()
+    {
+        rect.SetScrollTo(index);
+    }
     #endregion
 }
