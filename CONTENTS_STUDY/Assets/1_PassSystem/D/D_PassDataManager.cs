@@ -57,7 +57,7 @@ public class D_PassDataManager : MonoSingleton<D_PassDataManager>
     {
         // ÇöÀç ·¹º§ ·£´ý ¼³Á¤
         curLevel = Random.Range(1, 9);
-        //curLevel = 8;
+        //curLevel = 1;
         Debug.Log("ÇöÀç ·¹º§: " + curLevel);
         //È¹µæÇÑ ·¹º§
         CheckedLevel = Random.Range(0, curLevel);
@@ -65,8 +65,8 @@ public class D_PassDataManager : MonoSingleton<D_PassDataManager>
         Debug.Log("È¹µæÇÑ ·¹º§: " + CheckedLevel);
         // º¸»ó ·¹º§
         //CheckedRewardLevel = Random.Range(0, CheckedLevel);
-        // CheckedRewardLevel = 2;
-        //  Debug.Log("º¸»ó È¹µæÇÑ ·¹º§: " + CheckedRewardLevel);
+        //CheckedRewardLevel = 2;
+        //Debug.Log("º¸»ó È¹µæÇÑ ·¹º§: " + CheckedRewardLevel);
 
     }
 

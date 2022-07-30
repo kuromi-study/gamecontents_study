@@ -39,6 +39,8 @@ public class D_PAGE_PASS_PASSITEM : MonoBehaviour
         bActivePassReward = false;
     }
 
+
+
     public void Init(D_PASSREWARD data_,int needPoint_,int prevNeedPoint_, D_PASSSYSTEM passSystem_)
     {
         data = data_;
@@ -115,7 +117,7 @@ public class D_PAGE_PASS_PASSITEM : MonoBehaviour
         if (passLevel > curlevel)
             rewardPassImg[index].transform.GetChild(0).gameObject.SetActive(true);
         else
-        rewardPassImg[index].transform.GetChild(0).gameObject.SetActive(false);
+            rewardPassImg[index].transform.GetChild(0).gameObject.SetActive(false);
             
 
         // 경우 생각 하기
@@ -157,6 +159,7 @@ public class D_PAGE_PASS_PASSITEM : MonoBehaviour
             normalPassImg.transform.GetChild(1).gameObject.SetActive(false);
             return;
         }
+        
 
         // 획득 불가능한 경우 : 이미 획득한 경우
         if (passLevel <= checkedLevel || normal_type == ItemType.ckecked)
@@ -179,6 +182,26 @@ public class D_PAGE_PASS_PASSITEM : MonoBehaviour
         }
     }
 
+    public void GetPassRewards()
+    {
+        int curlevel = D_PassDataManager.Instance.curLevel;
+        if (curlevel < passLevel || !bActivePassReward) return;
+
+        if (pass1_type == ItemType.none && data.pass_reward_ID1 != 0)
+        {
+            pass1_type = ItemType.ckecked;
+            UpdatePassReward(0);
+            D_PassDataManager.Instance.AddList(D_PassDataManager.Instance.GetRewardMainData(data.pass_reward_ID1));
+        }
+
+        if (pass2_type == ItemType.none && data.pass_reward_ID2 != 0)
+        {
+            pass2_type = ItemType.ckecked;
+            UpdatePassReward(1);
+            D_PassDataManager.Instance.AddList(D_PassDataManager.Instance.GetRewardMainData(data.pass_reward_ID2));
+        }
+
+    }
     public void GetNormalReward()
     {
         int curlevel = D_PassDataManager.Instance.curLevel;
@@ -191,7 +214,7 @@ public class D_PAGE_PASS_PASSITEM : MonoBehaviour
         UpdateNormalReward();
     }
 
-
+    #region ImgButton
     public void DownNormalReward()
     {
         int curPoint = D_PassDataManager.Instance.curPoint;
@@ -210,12 +233,14 @@ public class D_PAGE_PASS_PASSITEM : MonoBehaviour
     {
         if (bActivePassReward && pass1_type == ItemType.none)
         {
+            passSystem.GetReward(passLevel);
+            /*
             pass1_type = ItemType.ckecked;
             UpdatePassReward(0);
 
             D_PassDataManager.Instance.AddList(D_PassDataManager.Instance.GetRewardMainData(data.pass_reward_ID1));
 
-            ShowGetItempopup();
+            ShowGetItempopup();*/
         }
         else if(!bActivePassReward  || pass1_type == ItemType.ckecked)
         {
@@ -227,28 +252,30 @@ public class D_PAGE_PASS_PASSITEM : MonoBehaviour
     {
         if (bActivePassReward && pass2_type == ItemType.none)
         {
+            passSystem.GetReward(passLevel);
+            /*
             pass2_type = ItemType.ckecked;
             UpdatePassReward(1);
 
             D_PassDataManager.Instance.AddList(D_PassDataManager.Instance.GetRewardMainData(data.pass_reward_ID2));
 
-            ShowGetItempopup();
+            ShowGetItempopup();*/
         }
         else if (!bActivePassReward || pass2_type == ItemType.ckecked)
         {
             ShowItemInfo(data.pass_reward_ID2);
         }
     }
+    #endregion
 
-    public void ShowGetItempopup()
-    {
-        GameObject prefab = Resources.Load<GameObject>("D_POPUP_GETITEM");
-        GameObject popup = Instantiate<GameObject>(prefab, GameObject.Find("Canvas").transform);
-        popup.GetComponent<D_POPUP_GETITEM>().UpdateList();
-    }
 
-    // 아이템 정보 보여주는  함수 
-
+    //public void ShowGetItempopup()
+    //{
+    //    GameObject prefab = Resources.Load<GameObject>("D_POPUP_GETITEM");
+    //    GameObject popup = Instantiate<GameObject>(prefab, GameObject.Find("Canvas").transform);
+    //    popup.GetComponent<D_POPUP_GETITEM>().UpdateList();
+    //}
+    
     public void ShowItemInfo(int itemLevel)
     {
         GameObject prefab = Resources.Load<GameObject>("D_POPUP_ITEMINFO");

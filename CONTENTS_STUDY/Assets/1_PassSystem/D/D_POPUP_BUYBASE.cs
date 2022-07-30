@@ -11,7 +11,7 @@ public class D_POPUP_BUYBASE : MonoBehaviour
     [SerializeField] Text descriptionTXT;
     [SerializeField] Text cancelTXT;
     [SerializeField] Text OKTXT;
-
+    D_PAGE_PASS pagePass ;
 
     private void Awake()
     { 
@@ -19,9 +19,10 @@ public class D_POPUP_BUYBASE : MonoBehaviour
         OKTXT.text = string.Format(D_StringkeyManager.Instance.GetString("ui_pass_012"));
     }
 
-    public void Init( POPUPType type)
+    public void Init(POPUPType type, D_PAGE_PASS pagePass)
     {
         popupType = type;
+        this.pagePass = pagePass;
         // 다이아 고정치 : 1000
         // 다이아 고정치 : 50
         switch (popupType)
@@ -34,12 +35,17 @@ public class D_POPUP_BUYBASE : MonoBehaviour
                 break;
         }
     }
-    public void BuyPass() { Debug.Log("다이아를 사용하여 패스 구매"); }
-    public void BuyLevel() { Debug.Log("다이아를 사용하여 레벨 구매"); }
+    public void BuyPass() { pagePass.BuyPass(); Debug.Log("다이아를 사용하여 패스 구매"); }
+    public void BuyLevel() { pagePass.BuyLevel(); Debug.Log("다이아를 사용하여 레벨 구매"); }
 
     public void DownBuyPassBtn()
     {
-       
+        switch (popupType)
+        {
+            case POPUPType.buyPass: { BuyPass(); } break;
+            case POPUPType.buyLevel: { BuyLevel(); } break;
+        }
+            
         Destroy(this.gameObject);
     }
 
