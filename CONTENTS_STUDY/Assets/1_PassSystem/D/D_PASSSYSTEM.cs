@@ -10,6 +10,7 @@ public class D_PASSSYSTEM : MonoBehaviour
     [SerializeField] GameObject scrollview;
     D_PAGE_PASS pagePass;
 
+    [HideInInspector]
     public List<GameObject> levelList = new List<GameObject>();
 
     private void Awake()
@@ -61,7 +62,7 @@ public class D_PASSSYSTEM : MonoBehaviour
 
         // 현재 레벨 최대 포인트 계산하기
         D_PassDataManager.Instance.maxPoint = points[curPassLevel-1];
-
+        
         // 현재 레벨 포인트 랜덤으로 설정하기
         if (curPassLevel != 1)
         {
@@ -69,7 +70,7 @@ public class D_PASSSYSTEM : MonoBehaviour
         }
         else
         {
-            int levelID = data[1].passLevel;
+            int levelID = data[1].passLevel_ID;
             D_PassDataManager.Instance.curPoint = Random.Range(D_PassDataManager.Instance.GetPassLevelData(levelID).NEEDPOINT, points[curPassLevel - 1] - 1);
         }
 
@@ -91,6 +92,8 @@ public class D_PASSSYSTEM : MonoBehaviour
         // EndReward
         GameObject instance = Instantiate<GameObject>(prefab, scrollview.transform.parent.parent.GetChild(0));
         instance.GetComponent<D_PAGE_PASS_PASSITEM>().Init(data[count], points[count - 1], points[count - 1], passSystem);
+        // background 색 변경
+        for (int i = 0; i < 3; i++) instance.transform.GetChild(i).GetComponent<Image>().color = new Color(1, 0.9f, 0);
         levelList.Add(instance);
 
         scrollview.SetActive(true);
@@ -113,13 +116,13 @@ public class D_PASSSYSTEM : MonoBehaviour
     {
         if (D_PassDataManager.Instance.curLevel - 1 < D_PassDataManager.Instance.CheckedLevel)
             return;
-        Debug.Log(D_PassDataManager.Instance.curLevel + " ; " + D_PassDataManager.Instance.CheckedLevel);
         D_PassDataManager.Instance.CheckedLevel = D_PassDataManager.Instance.curLevel;
 
         foreach (var i in levelList)
         {
             D_PAGE_PASS_PASSITEM sc = i.GetComponent<D_PAGE_PASS_PASSITEM>();
             sc.GetNormalReward();
+            sc.GetPassRewards();
         }
         ShowGetItemPopup(D_PassDataManager.Instance.CheckedLevel);
     }
@@ -128,7 +131,6 @@ public class D_PASSSYSTEM : MonoBehaviour
     public void GetReward(int level)
     {
         // 6 
-        Debug.Log(D_PassDataManager.Instance.curLevel + " ; " + D_PassDataManager.Instance.CheckedLevel);
         if (D_PassDataManager.Instance.curLevel - 1 < D_PassDataManager.Instance.CheckedLevel)
             return;
         foreach (var i in levelList)
@@ -138,6 +140,8 @@ public class D_PASSSYSTEM : MonoBehaviour
             {
                 D_PassDataManager.Instance.CheckedLevel = sc.data.passLevel;
                 sc.GetNormalReward();
+                // sc.GetPassRewards(); //
+                sc.GetPassRewards(); 
             }
         }
         ShowGetItemPopup(level);
@@ -163,7 +167,6 @@ public class D_PASSSYSTEM : MonoBehaviour
         D_PassDataManager.Instance.curPoint = 
             levelList[D_PassDataManager.Instance.curLevel-1].GetComponent<D_PAGE_PASS_PASSITEM>().needAllPoint;
 
-        Debug.Log("needAllPoint : "+levelList[D_PassDataManager.Instance.curLevel - 1].GetComponent<D_PAGE_PASS_PASSITEM>().needAllPoint);
         
         // 레벨 업
         D_PassDataManager.Instance.curLevel++;
@@ -176,24 +179,29 @@ public class D_PASSSYSTEM : MonoBehaviour
         
         // 업데이트된 레벨 텍스트 바꾸기
          levelList[curPassLevel].GetComponent<D_PAGE_PASS_PASSITEM>().UpdatePassLevel();
-
-        Debug.Log(D_PassDataManager.Instance.curLevel);
     }
+
 
     public bool DownBuyPassBtn()
     {
         int curlevel = D_PassDataManager.Instance.curLevel-1;
-
+        // 패스 구매가 되어있지 않다면
         if (!levelList[curlevel].GetComponent<D_PAGE_PASS_PASSITEM>().bActivePassReward)
         {
-            levelList[curlevel].GetComponent<D_PAGE_PASS_PASSITEM>().BuyPass();
             Debug.Log("패스 구매 완료");
             return true;
         }
+        // 패스 구매가 되어있다면 않다면
         Debug.Log("패스 구매 불가");
-
         return false;
     }
+
+    public void BuyPass()
+    {
+        int curlevel = D_PassDataManager.Instance.curLevel - 1;
+        levelList[curlevel].GetComponent<D_PAGE_PASS_PASSITEM>().BuyPass();
+    }
+
 
     private void ShowGetItemPopup(int level)
     {
@@ -201,5 +209,6 @@ public class D_PASSSYSTEM : MonoBehaviour
         GameObject popup = Instantiate<GameObject>(prefab, GameObject.Find("Canvas").transform);
         popup.GetComponent<D_POPUP_GETITEM>().UpdateList(level);
     }
+
 }
 

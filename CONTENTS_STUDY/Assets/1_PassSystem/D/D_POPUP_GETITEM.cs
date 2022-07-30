@@ -24,7 +24,6 @@ public class D_POPUP_GETITEM : MonoBehaviour
             GameObject prefab = Resources.Load<GameObject>("D_ITEM_IMAGE");
             GameObject instance = Instantiate<GameObject>(prefab, scrolllview.transform);
             instance.GetComponent<Image>().sprite = Resources.Load<Sprite>(list[i].IMAGEPATH);
-            Debug.Log(list[i].IMAGEPATH);
         }
         Debug.Log("UpdateList");
     }

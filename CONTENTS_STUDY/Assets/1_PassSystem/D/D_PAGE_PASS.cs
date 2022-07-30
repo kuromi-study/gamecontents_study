@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class D_PAGE_PASS : MonoBehaviour
 {
 
@@ -42,22 +41,21 @@ public class D_PAGE_PASS : MonoBehaviour
         //  패스 시스템 오픈
         OpenPagePass();
         missionSystem.InactiveSystem();
-
     }
 
     private void OnEnable()
     {
         // 코루틴
         StartCoroutine(SetRemainTime());
-
-       // StartCoroutine( AutoScroll());
     }
+
+
     private void OpenPagePass()
     {
         SetPassID();
         
         if (!bIsPassPossible) return;
-
+        
         passSystem = this.GetComponent<D_PASSSYSTEM>();
         missionSystem = this.GetComponent<D_MISSIONSYSTEM>();
         
@@ -70,12 +68,14 @@ public class D_PAGE_PASS : MonoBehaviour
 
         // 패스탭, 미션탭 생성
         passSystem.OpenPassSystem();
-        // 처음 Page_Pass열렸을 때
         missionSystem.OpenMissionSystem();
 
         UpdatePoint();
         UpdateLevel();
+
+      //  StartCoroutine(AutoScroll());
     }
+
     #region Update
     private void UpdatePoint()
     {
@@ -128,6 +128,8 @@ public class D_PAGE_PASS : MonoBehaviour
             {
                 bIsPassPossible = false;
             }
+
+            
         }
 
         // 1. 예외처리해주기
@@ -138,18 +140,27 @@ public class D_PAGE_PASS : MonoBehaviour
         else { bIsPassPossible = true; }
 
 
-      
     }
-
-
-    [Range(0,1)]
-    public float test;
+   
+    float speed = 0.2f;
     IEnumerator AutoScroll()
     {
-        yield return new WaitForSeconds(0.5f);
-        scrollview.verticalNormalizedPosition = test;
-    }
+        int curlevel = D_PassDataManager.Instance.curLevel;
 
+        yield return new WaitForSeconds(0.1f);
+        float targetPos = 1f - ((float)(curlevel) / (passScrollView.transform.childCount));
+       
+        Vector2 targetPosV2 = new Vector2(0,targetPos);
+        targetPosV2 = new Vector2(0, targetPos);
+        /*
+        while (scrollview.normalizedPosition.y >= targetPos)
+        {
+            yield return new WaitForSeconds(0.1f);
+            
+            scrollview.normalizedPosition -= new Vector2(0, speed);
+            var defaulttransfrom = scrollview.normalizedPosition;
+        }*/
+    }
 
     #region DownButton
     public void DownBackBtn()
@@ -182,27 +193,43 @@ public class D_PAGE_PASS : MonoBehaviour
     // 패스 구매하기 -> 패스 리워드 살 수 있음
     public void DownBuyPassBtn()
     {
+        // 패스 구매 가능한지 확인하기
         if (!passSystem.DownBuyPassBtn()) return;
+        
+        // 가능하면 팝업창 생성
         Debug.Log("패스 구매하기");
-
         GameObject prefab = Resources.Load<GameObject>("D_POPUP_BUYBASE");
         GameObject popup = Instantiate<GameObject>(prefab, GameObject.Find("Canvas").transform);
-        popup.GetComponent<D_POPUP_BUYBASE>().Init(D_POPUP_BUYBASE.POPUPType.buyPass);
+        popup.GetComponent<D_POPUP_BUYBASE>().Init(D_POPUP_BUYBASE.POPUPType.buyPass, this.GetComponent<D_PAGE_PASS>());
     }
+
+    public void BuyPass()
+    {
+        passSystem.BuyPass();
+    }
+
 
     public void DownBuyLevelBtn()
     {
         Debug.Log(" 레벨 구매하기");
 
         GameObject prefab = Resources.Load<GameObject>("D_POPUP_BUYBASE");
-        prefab.GetComponent<D_POPUP_BUYBASE>().Init( D_POPUP_BUYBASE.POPUPType.buyLevel);
         GameObject popup = Instantiate<GameObject>(prefab, GameObject.Find("Canvas").transform);
+        popup.GetComponent<D_POPUP_BUYBASE>().Init( D_POPUP_BUYBASE.POPUPType.buyLevel, this.GetComponent<D_PAGE_PASS>());
+    }
 
-        // 레벨 업데이트 하기
+    public void BuyLevel()
+    {
         passSystem.UpdateLevelUp();
         UpdateLevel();
         UpdatePoint();
+
+       // StartCoroutine(AutoScroll());
+
+
+
     }
+
     #endregion
 
     #region UpdateRemainTime
@@ -302,17 +329,21 @@ public class D_PAGE_PASS : MonoBehaviour
     #region ActiveTab
     public void DownPassTab()
     {
-        if (passScrollView.isStatic) return;
+        if (!MissionTab_) return;
+
+        Debug.Log("패스탭활성화");
         MissionTab_ = false;
         scrollview.content = passScrollView.GetComponent<RectTransform>();
         scrollview.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(950f,480f);
         passSystem.ActivePassSystem();
         missionSystem.InactiveSystem();
+
+         // StartCoroutine(AutoScroll());
     }
     bool MissionTab_ = false;
     public void DownMissionTab()
     {
-        if (missionScrollView.isStatic) return;
+        if (MissionTab_) return;
         MissionTab_ = true;
         scrollview.content = missionScrollView.GetComponent<RectTransform>();
         scrollview.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(950f, 600f);
