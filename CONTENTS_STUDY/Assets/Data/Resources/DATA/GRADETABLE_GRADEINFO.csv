@@ -1,0 +1,7 @@
+string,string,string,string,string,string,string,string,string,string,string,string,string,#
+ID,ENHANCE_1,ENHANCE_2,ENHANCE_3,ENHANCE_4,ENHANCE_5,GRADEUP_1,GRADEUP_2,GRADEUP_3,GRADEUP_4,GRADEUP_5,COMPOSE,NAME,sample
+1,1,2,3,4,5,1,2,3,4,5,1,grade_name_001,노말
+2,6,7,8,9,10,6,7,8,9,10,2,grade_name_002,레어
+3,11,12,13,14,15,11,12,13,14,15,3,grade_name_003,유니크
+4,16,17,18,19,20,16,17,18,19,20,4,grade_name_004,에픽
+5,21,22,23,24,25,21,22,23,24,25,5,grade_name_005,레전드
