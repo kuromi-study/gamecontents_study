@@ -47,6 +47,7 @@ public class DataHolder : MonoSingleton<DataHolder>
 
     public string GetValueFromTable(string tableName, string key, string column)
     {
+        Debug.Log(key);
         Dictionary<string, Dictionary<string, object>> table = new Dictionary<string, Dictionary<string, object>>();
         Dictionary<string, object> tmp = new Dictionary<string, object>();
         switch (tableName)
@@ -78,5 +79,11 @@ public class DataHolder : MonoSingleton<DataHolder>
     {
         if (value == 0) return null;
         return spriteDictionary[REWARDMAIN[value.ToString()]["IMAGEPATH"].ToString()];
+    }
+
+    public string GetTextByMissionID(int value)
+    {
+        if (value == 0) return null;
+        return GetValueFromTable("STRINGTABLE", REWARDMAIN[value.ToString()]["STRINGKEY"].ToString(), "DESCRIPTION");
     }
 }
