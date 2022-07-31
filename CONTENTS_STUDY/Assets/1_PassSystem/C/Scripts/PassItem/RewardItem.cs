@@ -103,14 +103,18 @@ public class RewardItem : MonoBehaviour
     }
     
 
-    void UpdateProgress()
+    public void UpdateProgress()
     {
         if (MagicBox.Instance.playerLevel >= reqLevel)
         {
-            canObtainNormal = canObtainPass1 = canObtainPass2 = true;
+            canObtainNormal = true;
             normalItemNormalImage.gameObject.SetActive(true);
-            pass1ItemNormalImage.gameObject.SetActive(true);
-            pass2ItemNormalImage.gameObject.SetActive(true);
+            if (PassManager.Instance.purchasedPass)
+            {
+                canObtainPass1 =canObtainPass2= true;
+                pass1ItemNormalImage.gameObject.SetActive(true);
+                pass2ItemNormalImage.gameObject.SetActive(true);
+            }
         }
     }
 
@@ -120,17 +124,32 @@ public class RewardItem : MonoBehaviour
         switch (num)
         {
             case 0:
-                if (!canObtainNormal || isNormalObtained) return;
+                if (!canObtainNormal || isNormalObtained)
+                {
+                    PassManager.Instance.ActiveItemInfoObj(DataHolder.Instance.GetSpriteByMissionID(normalRewardID),
+                        DataHolder.Instance.GetTextByMissionID(normalRewardID));
+                    return;
+                }
                 normalItemGetImage.gameObject.SetActive(true);
                 MagicBox.Instance.GainItem(normalRewardID);
                 break;
             case 1:
-                if (!canObtainPass1 || isPass1Obtained) return;
+                if (!canObtainPass1 || isPass1Obtained)
+                {
+                    PassManager.Instance.ActiveItemInfoObj(DataHolder.Instance.GetSpriteByMissionID(pass1RewardID),
+                        DataHolder.Instance.GetTextByMissionID(pass1RewardID));
+                    return;
+                }
                 pass1ItemGetImage.gameObject.SetActive(true);
                 MagicBox.Instance.GainItem(pass1RewardID);
                 break;
             case 2:
-                if (!canObtainPass2 || isPass2Obtained) return;
+                if (!canObtainPass2 || isPass2Obtained)
+                {
+                    PassManager.Instance.ActiveItemInfoObj(DataHolder.Instance.GetSpriteByMissionID(pass2RewardID),
+                        DataHolder.Instance.GetTextByMissionID(pass2RewardID));
+                    return;
+                }
                 pass2ItemGetImage.gameObject.SetActive(true);
                 MagicBox.Instance.GainItem(pass2RewardID);
                 break;

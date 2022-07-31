@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using Utility.Singleton;
 using UnityEngine.UI;
@@ -16,7 +17,7 @@ public class PassManager : MonoSingleton<PassManager>
     private Button objActiveButton;
     private const int MAX_ITEM_COUNT = 20;
     private int season;
-    private bool purchasedPass = false;
+    public bool purchasedPass = false;
 
 
     List<KeyValuePair<string, Dictionary<string, object>>> missionMainData, missionTypeData;
@@ -26,9 +27,10 @@ public class PassManager : MonoSingleton<PassManager>
 
     private List<MissionItem> missionItemList=new List<MissionItem>();
     private List<RewardItem> rewardItemList=new List<RewardItem>();
+    private RewardItem lastReward;
     List<Action> rewardItemActions=new List<Action>();
-    
-    private GameObject passObj;
+
+    [SerializeField] private GameObject passObj;
     private Transform passTr;
     [SerializeField]
     private GameObject missionItemObj, rewardItemObj;
@@ -36,6 +38,8 @@ public class PassManager : MonoSingleton<PassManager>
     private Button closeButton;
     private Button infoButton;
     private Image infoPanel;
+    private Text infoText;
+    private Button infoCloseButton;
     private Button purchasePassButton;
     
     private Toggle rewardToggle;
@@ -44,7 +48,19 @@ public class PassManager : MonoSingleton<PassManager>
     private GameObject rewardPanel;
     private GameObject missionScroll;
     private GameObject rewardScroll;
+
+    private GameObject itemInfoPanel;
+    private Image itemImage;
+    private Text itemText;
+    private Button itemCloseBtn;
     
+
+    private GameObject buyBasePanel;
+    private Text buyText;
+    private Button buyCancelBtn;
+    private Button buyConfirmBtn;
+
+    private GameObject getItemsPanel;
     
     private Button purchaseLevelButton;
     private Button receiveAllRewardButton;
@@ -55,7 +71,7 @@ public class PassManager : MonoSingleton<PassManager>
     
     void BindObjects()
     {
-        passObj = GameObject.Find("PAGE_PASS");
+        //passObj = GameObject.Find("PAGE_PASS");
         objActiveButton = GameObject.Find("OpenButton").GetComponent<Button>();
         passTr = passObj.transform;
         List<Transform> children = passTr.GetComponentsInChildren<Transform>(true).ToList();
@@ -65,6 +81,8 @@ public class PassManager : MonoSingleton<PassManager>
         closeButton = children.Find(x => x.name == "btn_back").GetComponent<Button>();
         infoButton = children.Find(x => x.name =="btn_info").GetComponent<Button>();
         infoPanel = children.Find(x => x.name =="POPUP_PASSINFO").GetComponent<Image>();
+        infoText = children.Find(x => x.name == "txt_description").GetComponent<Text>();
+        infoCloseButton = children.Find(x => x.name == "btn_close").GetComponent<Button>();
         purchasePassButton = children.Find(x => x.name =="btn_passbuy").GetComponent<Button>();
         
         missionToggle = children.Find(x => x.name =="toggle_mission").GetComponent<Toggle>();
@@ -73,6 +91,19 @@ public class PassManager : MonoSingleton<PassManager>
         rewardPanel = children.Find(x => x.name == "PassRewardPanel").gameObject;
         missionScroll = children.Find(x => x.name == "MissionScroll").gameObject;
         rewardScroll = children.Find(x => x.name == "RewardScroll").gameObject;
+        lastReward = children.Find(x => x.name == "ENDREWARD").GetComponent<RewardItem>();
+
+        itemInfoPanel=children.Find(x => x.name == "POPUP_ITEMINFO").gameObject;
+        itemImage = itemInfoPanel.transform.GetChild(1).GetChild(0).GetComponent<Image>();
+        itemText = itemInfoPanel.transform.GetChild(1).GetChild(1).GetComponent<Text>();
+        itemCloseBtn = itemInfoPanel.transform.GetChild(1).GetChild(2).GetComponent<Button>();
+        
+        buyBasePanel=children.Find(x => x.name == "POPUP_BUYBASE").gameObject;
+        buyText = buyBasePanel.transform.GetChild(1).GetChild(0).GetComponent<Text>();
+        buyCancelBtn = buyBasePanel.transform.GetChild(1).GetChild(1).GetComponent<Button>();
+        buyConfirmBtn = buyBasePanel.transform.GetChild(1).GetChild(2).GetComponent<Button>();
+
+        getItemsPanel = children.Find(x => x.name == "POPUP_GETITEM").gameObject;
 
         purchaseLevelButton = children.Find(x => x.name =="btn_lv").GetComponent<Button>();
         receiveAllRewardButton = children.Find(x => x.name =="btn_getall").GetComponent<Button>();
@@ -109,14 +140,23 @@ public class PassManager : MonoSingleton<PassManager>
         missionTypeData = ExcelParser.Read("MISSION_TABLE-MISSIONTYPE").ToList();
         entireSeasonRewardData = ExcelParser.Read("PASS_TABLE-PASSREWARD");
         passRewardData = entireSeasonRewardData.ToList();
+
+        infoText.text = DataHolder.Instance.GetValueFromTable("STRINGTABLE", "ui_pass_003", "DESCRIPTION");
         
-        
+        closeButton.onClick.AddListener(ActivePassObj);
         objActiveButton.onClick.AddListener(ActivePassObj);
         purchasePassButton.onClick.AddListener(PurchasePass);
+        infoButton.onClick.AddListener(ActiveInfoObj);
+        infoCloseButton.onClick.AddListener(ActiveInfoObj);
         missionToggle.onValueChanged.AddListener(EnableMissionScroll);
         rewardToggle.onValueChanged.AddListener(EnableRewardScroll);
+
+        itemCloseBtn.onClick.AddListener(CloseItemInfoObj);
         
-        purchaseLevelButton.onClick.AddListener(PurchaseLevel);
+        purchaseLevelButton.onClick.AddListener(ActiveBuyBaseObj);
+        buyCancelBtn.onClick.AddListener(ActiveBuyBaseObj);
+        buyConfirmBtn.onClick.AddListener(PurchaseLevel);
+        
         receiveAllRewardButton.onClick.AddListener(ReceiveAll);
 
         for (int i = 0; i < MAX_ITEM_COUNT; i++)
@@ -171,7 +211,6 @@ public class PassManager : MonoSingleton<PassManager>
 
     void InitRewardScroll()
     {
-        
         int cnt = passRewardData.Count, idx = 0;
         for (int i = 0; i < passRewardData.Count; i++)
         {
@@ -179,12 +218,26 @@ public class PassManager : MonoSingleton<PassManager>
         }
         for (int i = 0; i < rewardItemList.Count; i++)
         {
+            
             if (idx < cnt && Int32.Parse(passRewardData[idx].Value["PASSMAIN_ID"].ToString()) == season)
             {
-                rewardItemList[i].InitItem();
-                rewardItemList[i].InitData(passRewardData[idx]);
-                idx++;
-                rewardItemActions.Add(rewardItemList[i].ReceiveAll);
+                if (Int32.Parse(passRewardData[idx+1].Value["PASSMAIN_ID"].ToString()) == season)
+                {
+                    rewardItemList[i].InitItem();
+                    rewardItemList[i].InitData(passRewardData[idx]);
+                    idx++;
+                    rewardItemActions.Add(rewardItemList[i].ReceiveAll);
+                    Debug.Log("1");
+                }
+                else
+                {
+                    rewardItemList[i].gameObject.SetActive(false);
+                    lastReward.InitItem();
+                    lastReward.InitData(passRewardData[idx]);
+                    idx++;
+                    rewardItemActions.Add(lastReward.ReceiveAll);
+                    Debug.Log("2");
+                }
             }
             else
             {
@@ -195,7 +248,10 @@ public class PassManager : MonoSingleton<PassManager>
     
     void UpdateRewardScroll()
     {
-        
+        for (int i = 0; i < rewardItemList.Count; i++)
+        {
+            rewardItemList[i].UpdateProgress();
+        }
     }
     
 
@@ -227,7 +283,7 @@ public class PassManager : MonoSingleton<PassManager>
         if (!foundSeason)
         {
             startTime = endTime = DateTime.MinValue;
-            Debug.Log("Ω√¡ ¡§∫∏∞° ¿‘∑¬µ«¡ˆ æ æ“Ω¿¥œ¥Ÿ.");
+            Debug.Log("ÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩ‘∑¬µÔøΩÔøΩÔøΩ ÔøΩ æ“ΩÔøΩÔøΩœ¥ÔøΩ.");
         }
     }
 
@@ -258,19 +314,19 @@ public class PassManager : MonoSingleton<PassManager>
             remainTimeSpan = endTime.Subtract(DateTime.Now);
             if (remainTimeSpan.Days > 0)
             {
-                timerText.text = $"{remainTimeSpan.Days}D ≥≤¿Ω";
+                timerText.text = $"{remainTimeSpan.Days}D ÔøΩÔøΩÔøΩÔøΩ";
             }
             else if (remainTimeSpan.Hours > 0)
             {
-                timerText.text = $"{remainTimeSpan.Hours}H ≥≤¿Ω";
+                timerText.text = $"{remainTimeSpan.Hours}H ÔøΩÔøΩÔøΩÔøΩ";
             }
             else if (remainTimeSpan.Minutes > 0)
             {
-                timerText.text = $"{remainTimeSpan.Minutes}M ≥≤¿Ω";
+                timerText.text = $"{remainTimeSpan.Minutes}M ÔøΩÔøΩÔøΩÔøΩ";
             }
             else if (remainTimeSpan.Seconds > 0)
             {
-                timerText.text = $"{remainTimeSpan.Seconds}S ≥≤¿Ω";
+                timerText.text = $"{remainTimeSpan.Seconds}S ÔøΩÔøΩÔøΩÔøΩ";
             }
             else
             {
@@ -282,7 +338,7 @@ public class PassManager : MonoSingleton<PassManager>
     }
 
     #endregion
-
+    
     
     void ActivePassObj()
     {
@@ -301,21 +357,79 @@ public class PassManager : MonoSingleton<PassManager>
         if (!purchasedPass)
         {
             purchasedPass = true;
-            purchasePassButton.transform.GetChild(0).GetComponent<Text>().text = "∆–Ω∫ ±∏∏≈ øœ∑·!";
+            purchasePassButton.transform.GetChild(0).GetComponent<Text>().text = "ÔøΩ–ΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ ÔøΩœ∑ÔøΩ!";
+            UpdateRewardScroll();
         }
     }
 
+    void ActiveInfoObj()
+    {
+        if (infoPanel.gameObject.activeInHierarchy)
+        {
+            infoPanel.gameObject.SetActive(false);
+        }
+        else
+        {
+            infoPanel.gameObject.SetActive(true);
+        }
+    }
+
+    public void ActiveItemInfoObj(Sprite sprite, string text)
+    {
+        if (itemInfoPanel.gameObject.activeInHierarchy)
+        {
+            itemInfoPanel.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.Log(text);
+            itemImage.sprite = sprite;
+            itemText.text = text;
+            itemInfoPanel.gameObject.SetActive(true);
+        }
+    }
+
+    void CloseItemInfoObj()
+    {
+        itemInfoPanel.gameObject.SetActive(false);
+    }
+
+    void ActiveBuyBaseObj()
+    {
+        if (buyBasePanel.gameObject.activeInHierarchy)
+        {
+            buyBasePanel.gameObject.SetActive(false);
+        }
+        else
+        {
+            buyText.text = $"50Îã§Ïù¥ÏïÑÎ•º ÏÇ¨Ïö©ÌïòÏó¨ {MagicBox.Instance.playerLevel + 1}ÏùÑ Îã¨ÏÑ±Ìï©ÎãàÎã§.";
+            buyBasePanel.gameObject.SetActive(true);
+        }
+    }
+    
     void PurchaseLevel()
     {
+        ActiveBuyBaseObj();
         MagicBox.Instance.LevelUp();
     }
 
     void ReceiveAll()
     {
+        List<Sprite> sprites=new List<Sprite>();
         foreach (var action in rewardItemActions)
         {
             action();
         }
+    }
+
+    public void UpdateLevelText(int num)
+    {
+        levelText.text = $"Lv.{num}";
+    }
+
+    public void UpdateEXPText(int cur, int req)
+    {
+        expText.text = $"{cur},{req}";
     }
 
 }

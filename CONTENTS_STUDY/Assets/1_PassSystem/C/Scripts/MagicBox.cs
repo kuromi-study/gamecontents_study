@@ -17,6 +17,7 @@ public class MagicBox : MonoSingleton<MagicBox>
         onItemBought,
         onItemSold,
         onMissionCompleted,
+        onGainEXP,
         onLevelUp;
 
     public delegate void SingleParamDelegate(int value);
@@ -156,7 +157,14 @@ public class MagicBox : MonoSingleton<MagicBox>
 
     public void GainEXP(int amount)
     {
-        
+        Debug.Log($"Gain {amount} EXP!");
+        curExp += amount;
+        if (curExp >= reqExp)
+        {
+            LevelUp();
+            curExp -= reqExp;
+        }
+        onGainEXP();
     }
 
     public void LevelUp()
