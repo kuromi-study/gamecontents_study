@@ -3,15 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ItemInfo
-{
-    public uint ItemUID { get; set; }
-    public int Grade { get; set; }
-    public int Enhance { get; set; }
-    public int Star { get; set; }
-    public int Num { get; set; }
-}
-
 public class C_UI_Inventory_Item : MonoBehaviour
 {
     [Header("아이템 상태처리")]
@@ -48,22 +39,24 @@ public class C_UI_Inventory_Item : MonoBehaviour
         set => _locked.SetActive(value);
     }
 
-    public void SetData(ItemInfo iteminfo)
+    public void SetData(Item_FBS item)
     {
-        _gradeTxt.text = iteminfo.Grade.ToString();
-        _enhanceTxt.text = iteminfo.Enhance.ToString();
-        _numTxt.text = iteminfo.Num.ToString();
+        var newInfo = ItemInfo.GetItemInfo(item.ItemUID);
+
+        _gradeTxt.text = newInfo.Grade.ToString();
+        //_enhanceTxt.text = newInfo.Enhance.ToString();
+        //_numTxt.text = newInfo.Num.ToString();
         
-        for(int i = 0; i<_starList.Count;i++)
-        {
-            if(i<iteminfo.Star)
-            {
-                _starList[i].SetActive(true);
-            }
-            else
-            {
-                _starList[i].SetActive(false);
-            }
-        }
+        //for(int i = 0; i<_starList.Count;i++)
+        //{
+        //    if(i< newInfo.Star)
+        //    {
+        //        _starList[i].SetActive(true);
+        //    }
+        //    else
+        //    {
+        //        _starList[i].SetActive(false);
+        //    }
+        //}
     }
 }
