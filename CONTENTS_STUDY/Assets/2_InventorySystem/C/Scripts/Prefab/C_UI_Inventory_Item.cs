@@ -39,9 +39,9 @@ public class C_UI_Inventory_Item : MonoBehaviour
         set => _locked.SetActive(value);
     }
 
-    public void SetData(Item_FBS item)
+    public void SetData(C_Item_FBS item)
     {
-        var newInfo = ItemInfo.GetItemInfo(item.ItemUID);
+        var newInfo = C_ItemInfo.GetItemInfo(item.ItemUID);
 
         _gradeTxt.text = newInfo.Grade.ToString();
         //_enhanceTxt.text = newInfo.Enhance.ToString();

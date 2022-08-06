@@ -2,24 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class Item_FBS
+public class C_Item_FBS
 {
     public int ItemUID { get; set; }
 }
 
-public class ItemInfo
+public class C_ItemInfo
 {
     public int ItemUID { get; set; }
     public int Grade { get; set; }
     public bool isLock { get; set; }
     public int Index { get; set; }
 
-    public ItemInfo(int uid)
+    public C_ItemInfo(int uid)
     {
         this.ItemUID = uid;
     }
 
-    public static ItemInfo GetItemInfo(int uid)
+    public static C_ItemInfo GetItemInfo(int uid)
     {
         if(uid < 2000)
         {
@@ -32,7 +32,7 @@ public class ItemInfo
     }
 }
 
-public class ItemInfoEquip : ItemInfo
+public class ItemInfoEquip : C_ItemInfo
 {
     public int Enhance { get; set; }
     public int Star { get; set; }
@@ -41,7 +41,7 @@ public class ItemInfoEquip : ItemInfo
     }
 }
 
-public class ItemInfoPortion : ItemInfo
+public class ItemInfoPortion : C_ItemInfo
 {
     public int Num { get; set; }
 
