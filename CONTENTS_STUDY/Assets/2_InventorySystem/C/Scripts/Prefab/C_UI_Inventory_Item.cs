@@ -59,4 +59,11 @@ public class C_UI_Inventory_Item : MonoBehaviour
         //    }
         //}
     }
+
+    public void SetEmpty()
+    {
+        IsSelect = false;
+        IsEquip = false;
+        IsLock = false;
+    }
 }
