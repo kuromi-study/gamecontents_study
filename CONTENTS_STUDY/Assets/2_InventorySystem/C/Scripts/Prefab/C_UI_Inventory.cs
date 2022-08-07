@@ -201,14 +201,27 @@ public class C_UI_Inventory : MonoBehaviour
         for (int i = 0; i < LIST_MAX_COUNT; i++)
         {
             var item = _scrollContent.transform.GetChild(i);
+            var script = item.GetComponent<C_UI_Inventory_Item>();
 
-            if(i>=listCount)
+            if(script == null)
             {
                 item.gameObject.SetActive(false);
+                continue;
+            }
+
+            if(script.ItemInfo == null)
+            {
+                item.gameObject.SetActive(false);
+                continue;
+            }
+
+            if(int.Parse(script.ItemInfo.MainCategory) == (int)eItemCategory.EQUIP)
+            {
+                item.gameObject.SetActive(true);
             }
             else
             {
-                item.gameObject.SetActive(true);
+                item.gameObject.SetActive(false);
             }
         }
     }
@@ -219,32 +232,57 @@ public class C_UI_Inventory : MonoBehaviour
         for (int i = 0; i < LIST_MAX_COUNT; i++)
         {
             var item = _scrollContent.transform.GetChild(i);
+            var script = item.GetComponent<C_UI_Inventory_Item>();
 
-            if (i >= listCount)
+            if (script == null)
             {
                 item.gameObject.SetActive(false);
+                continue;
+            }
+
+            if (script.ItemInfo == null)
+            {
+                item.gameObject.SetActive(false);
+                continue;
+            }
+
+            if (int.Parse(script.ItemInfo.MainCategory) == (int)eItemCategory.ACC)
+            {
+                item.gameObject.SetActive(true);
             }
             else
             {
-                item.gameObject.SetActive(true);
+                item.gameObject.SetActive(false);
             }
         }
     }
 
     private void RefreshInventoryPotion()
     {
-        var listCount = C_UserInfo.Instance.itemList.Count;
         for (int i = 0; i < LIST_MAX_COUNT; i++)
         {
             var item = _scrollContent.transform.GetChild(i);
+            var script = item.GetComponent<C_UI_Inventory_Item>();
 
-            if (i >= listCount)
+            if (script == null)
             {
                 item.gameObject.SetActive(false);
+                continue;
+            }
+
+            if (script.ItemInfo == null)
+            {
+                item.gameObject.SetActive(false);
+                continue;
+            }
+
+            if (int.Parse(script.ItemInfo.MainCategory) == (int)eItemCategory.POTION)
+            {
+                item.gameObject.SetActive(true);
             }
             else
             {
-                item.gameObject.SetActive(true);
+                item.gameObject.SetActive(false);
             }
         }
     }

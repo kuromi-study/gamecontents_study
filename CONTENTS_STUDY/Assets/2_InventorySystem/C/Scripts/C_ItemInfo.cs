@@ -43,6 +43,13 @@ public class C_ItemInfo
             return _itemMainInfo[ItemUID.ToString()]["DESCRIPTION"].ToString();
         }
     }
+    public string MainCategory
+    {
+        get
+        {
+            return _itemMainInfo[ItemUID.ToString()]["MAIN_CATEGORY"].ToString();
+        }
+    }
 
     public string MainCategoryString
     {
@@ -85,7 +92,7 @@ public class C_ItemInfo
 
     public static C_ItemInfo GetItemInfo(int uid)
     {
-        if(uid < 2000)
+        if(uid < 200001)
         {
             return new ItemInfoEquip(uid);
         }

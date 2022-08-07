@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum eItemCategory
+{
+    EQUIP = 1,
+    ACC = 1001,
+    POTION = 2001,
+}
 public class C_UI_Inventory_Item : MonoBehaviour
 {
     [Header("아이템 상태처리")]
@@ -20,6 +26,8 @@ public class C_UI_Inventory_Item : MonoBehaviour
     [Header("하단 정보")]
     [SerializeField] List<GameObject> _starList;
     [SerializeField] Text _numTxt;
+
+    public C_ItemInfo ItemInfo;
 
     public bool IsSelect
     {
@@ -41,17 +49,19 @@ public class C_UI_Inventory_Item : MonoBehaviour
 
     public void SetData(C_Item_FBS item)
     {
-        var newInfo = C_ItemInfo.GetItemInfo(item.ItemUID) as ItemInfoEquip;
+        ItemInfo = C_ItemInfo.GetItemInfo(item.ItemUID);
 
-        _itemImg.sprite = Resources.Load<Sprite>(newInfo.ImagePath);
+        var itemInfoConvert = ItemInfo as ItemInfoEquip;
 
-        _gradeTxt.text = newInfo.Grade.ToString();
-        _enhanceTxt.text = newInfo.Enhance.ToString();
+        _itemImg.sprite = Resources.Load<Sprite>(ItemInfo.ImagePath);
+
+        _gradeTxt.text = itemInfoConvert.Grade.ToString();
+        _enhanceTxt.text = itemInfoConvert.Enhance.ToString();
         //_numTxt.text = newInfo.Num.ToString();
 
         for (int i = 0; i < _starList.Count; i++)
         {
-            if (i < newInfo.Star)
+            if (i < itemInfoConvert.Star)
             {
                 _starList[i].SetActive(true);
             }
@@ -62,8 +72,8 @@ public class C_UI_Inventory_Item : MonoBehaviour
         }
 
         IsSelect = false;
-        IsEquip = newInfo.isEquip;
-        IsLock = newInfo.isLock;
+        IsEquip = itemInfoConvert.isEquip;
+        IsLock = itemInfoConvert.isLock;
     }
 
     public void SetData(C_ItemInfo item)
