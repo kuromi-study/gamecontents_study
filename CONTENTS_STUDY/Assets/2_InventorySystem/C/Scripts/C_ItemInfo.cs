@@ -78,9 +78,9 @@ public class C_ItemInfo
     public C_ItemInfo(int uid)
     {
         this.ItemUID = uid;
-        _itemMainInfo = ExcelParser.Read("ITEMTABLE_MAININFO");
-        _itemMainInfo = ExcelParser.Read("ITEMTABLE_CLASSIFICATION");
-        _itemMainInfo = ExcelParser.Read("GRADETABLE_GRADEINFO");
+        _itemMainInfo = ExcelParser.Read("DATA/ITEMTABLE_MAININFO");
+        _itemMainInfo = ExcelParser.Read("DATA/ITEMTABLE_CLASSIFICATION");
+        _itemMainInfo = ExcelParser.Read("DATA/GRADETABLE_GRADEINFO");
     }
 
     public static C_ItemInfo GetItemInfo(int uid)
