@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class C_UI_InventoryPage : MonoBehaviour
+public class A_UI_InventoryPage : MonoBehaviour
 {
     [Header("TOP")]
     Text backBtnTXT;
@@ -23,16 +23,16 @@ public class C_UI_InventoryPage : MonoBehaviour
     bool bConsumableActive = true;
     // [Header("RIGHT")]
 
-    /*
-     * 스크립트
-     * 
-     page 관리 -> C_UI_Inventory_Page, 재화량 관리, 아이템 고정 및 위치
-     아이템 관리 -> 장착중, 선택중, 잠김 이런거 관리
-     아이템 정보 읽어오는 거 -> 구조체 정의하기
-     강화, 태생, 승급, 합성 관리하는 스크립트 -> 4개
-     */
+    public void InventoryOpen()
+    {
+        // 버튼 텍스트
+        backBtnTXT.text = D_StringkeyManager.Instance.GetString("ui_pass_001");
+        titleTXT.text = D_StringkeyManager.Instance.GetString("ui_title_001");
+        
+    }
 
-    private void setCash(float amount)
+
+    private void UpdateCash(float amount)
     {
         // 골드표현은 국제표기에 맞게 간소화된 형태를 사용한다. 짤린 숫자는 버림(Floor) 처리한다.
 
