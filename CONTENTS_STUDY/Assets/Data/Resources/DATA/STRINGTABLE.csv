@@ -58,3 +58,110 @@ item_description_25,아이템 011번 입니다.
 item_description_26,아이템 012번 입니다.
 item_description_27,아이템 013번 입니다.
 item_description_28,아이템 014번 입니다.
+equip_name_0001,장비1
+equip_name_0002,장비2
+equip_name_0003,장비3
+accessories_name_0001,악세사리1
+accessories_name_0002,악세사리2
+accessories_name_0003,악세사리3
+portion_name_0001,포션1
+portion_name_0002,포션2
+portion_name_0003,포션3
+portion_name_0004,포션4
+portion_name_0005,포션5
+equip_name_0004,장비4
+equip_name_0005,장비5
+equip_name_0006,장비6
+equip_name_0007,장비7
+equip_name_0008,장비8
+equip_name_0009,장비9
+equip_name_0010,장비10
+equip_name_0011,장비11
+equip_name_0012,장비12
+equip_name_0013,장비13
+equip_name_0014,장비14
+equip_name_0015,장비15
+accessories_name_0004,악세사리4
+accessories_name_0005,악세사리5
+accessories_name_0006,악세사리6
+accessories_name_0007,악세사리7
+accessories_name_0008,악세사리8
+accessories_name_0009,악세사리9
+accessories_name_0010,악세사리10
+accessories_name_0011,악세사리11
+accessories_name_0012,악세사리12
+accessories_name_0013,악세사리13
+accessories_name_0014,악세사리14
+accessories_name_0015,악세사리15
+equip_des_0001,장비1 입니다.
+equip_des_0002,장비2 입니다.
+equip_des_0003,장비3 입니다.
+accessories_des_0001,악세사리1 입니다.
+accessories_des_0002,악세사리2 입니다.
+accessories_des_0003,악세사리3 입니다.
+portion_des_0001,포션1 입니다.
+portion_des_0002,포션2 입니다.
+portion_des_0003,포션3 입니다.
+portion_des_0004,포션4 입니다.
+portion_des_0005,포션5 입니다.
+equip_des_0004,장비4 입니다.
+equip_des_0005,장비5 입니다.
+equip_des_0006,장비6 입니다.
+equip_des_0007,장비7 입니다.
+equip_des_0008,장비8 입니다.
+equip_des_0009,장비9 입니다.
+equip_des_0010,장비10 입니다.
+equip_des_0011,장비11 입니다.
+equip_des_0012,장비12 입니다.
+equip_des_0013,장비13 입니다.
+equip_des_0014,장비14 입니다.
+equip_des_0015,장비15 입니다.
+accessories_des_0004,악세사리4 입니다.
+accessories_des_0005,악세사리5 입니다.
+accessories_des_0006,악세사리6 입니다.
+accessories_des_0007,악세사리7 입니다.
+accessories_des_0008,악세사리8 입니다.
+accessories_des_0009,악세사리9 입니다.
+accessories_des_0010,악세사리10 입니다.
+accessories_des_0011,악세사리11 입니다.
+accessories_des_0012,악세사리12 입니다.
+accessories_des_0013,악세사리13 입니다.
+accessories_des_0014,악세사리14 입니다.
+accessories_des_0015,악세사리15 입니다.
+classification_name_0001,장비
+classification_name_0002,투구
+classification_name_0003,갑옷
+classification_name_0004,신발
+classification_name_0005,악세사리
+classification_name_0006,목걸이
+classification_name_0007,반지
+classification_name_0008,허리띠
+classification_name_0009,소모품
+classification_name_0009,포션
+classification_name_0009,강화석
+grade_name_001,노말
+grade_name_002,레어
+grade_name_003,유니크
+grade_name_004,에픽
+grade_name_005,레전드
+ui_title_001,인벤토리
+ui_inventory_001 ,{0} / {1}
+ui_inventory_002,버리기
+ui_inventory_003,공격력 : {0}
+ui_inventory_004,방어력 : {0}
+ui_inventory_005,HP : {0}
+ui_inventory_006,MP : {0}
+ui_inventory_007,{0} -> {1}
+ui_inventory_008,{0} 최고 강화 상태입니다.
+ui_inventory_009,공격력 : {0} -> {1}
+ui_inventory_010,방어력 : {0} -> {1}
+ui_inventory_011,공격력 : {0} 최고 강화 상태입니다.
+ui_inventory_012,방어력 : {0} 최고 강화 상태입니다.
+ui_inventory_013,HP : {0} -> {1}
+ui_inventory_014,MP : {0} -> {1}
+ui_inventory_015,HP : {0} 최고 강화 상태입니다.
+ui_inventory_016,MP : {0} 최고 강화 상태입니다.
+ui_inventory_017,재료가 부족합니다.
+ui_inventory_018,전투력 : {0}
+ui_inventory_019,HP회복 : {0}
+ui_inventory_020,MP회복 : {0}
