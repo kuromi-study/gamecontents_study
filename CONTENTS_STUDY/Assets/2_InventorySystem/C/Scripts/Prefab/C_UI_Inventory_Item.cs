@@ -41,23 +41,36 @@ public class C_UI_Inventory_Item : MonoBehaviour
 
     public void SetData(C_Item_FBS item)
     {
+        var newInfo = C_ItemInfo.GetItemInfo(item.ItemUID) as ItemInfoEquip;
+
+        _itemImg.sprite = Resources.Load<Sprite>(newInfo.ImagePath);
+
+        _gradeTxt.text = newInfo.Grade.ToString();
+        _enhanceTxt.text = newInfo.Enhance.ToString();
+        //_numTxt.text = newInfo.Num.ToString();
+
+        for (int i = 0; i < _starList.Count; i++)
+        {
+            if (i < newInfo.Star)
+            {
+                _starList[i].SetActive(true);
+            }
+            else
+            {
+                _starList[i].SetActive(false);
+            }
+        }
+
+        IsSelect = false;
+        IsEquip = newInfo.isEquip;
+        IsLock = newInfo.isLock;
+    }
+
+    public void SetData(C_ItemInfo item)
+    {
         var newInfo = C_ItemInfo.GetItemInfo(item.ItemUID);
 
         _gradeTxt.text = newInfo.Grade.ToString();
-        //_enhanceTxt.text = newInfo.Enhance.ToString();
-        //_numTxt.text = newInfo.Num.ToString();
-        
-        //for(int i = 0; i<_starList.Count;i++)
-        //{
-        //    if(i< newInfo.Star)
-        //    {
-        //        _starList[i].SetActive(true);
-        //    }
-        //    else
-        //    {
-        //        _starList[i].SetActive(false);
-        //    }
-        //}
     }
 
     public void SetEmpty()

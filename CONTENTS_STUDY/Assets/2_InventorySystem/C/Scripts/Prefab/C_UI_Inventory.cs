@@ -35,6 +35,9 @@ public class C_UI_Inventory : MonoBehaviour
     [SerializeField] Text _numTxt;
     [SerializeField] Button _abandonBtn;
 
+    [Header("중앙_아이템관련페이지")]
+    [SerializeField] C_UI_Inventory_InfoPage _infoPage;
+
     readonly int LIST_MAX_COUNT = 300;
 
     static GameObject _thispage;
@@ -261,6 +264,19 @@ public class C_UI_Inventory : MonoBehaviour
     private void OnClickAbandon()
     {
         // 아이템 삭제처리
+    }
+
+    public void OnClickItem(C_ItemInfo iteminfo)
+    {
+        // 처음 눌린아이템이면
+        {
+            // 정보페이지로 변경
+
+            // 정보페이지 갱신
+            _infoPage.InitItemInfoPage(iteminfo);
+        }
+        // 기존에 눌렸던 아이템이면
+        // 별도처리 하지 않는다.
     }
     #endregion
 }
