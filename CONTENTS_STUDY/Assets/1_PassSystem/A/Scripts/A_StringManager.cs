@@ -12,7 +12,7 @@ public class A_StringManager : MonoSingleton<A_StringManager>
     {
         if(stringtable == null)
         {
-            stringtable = ExcelParser.Read("STRINGTABLE");
+            stringtable = ExcelParser.Read("DATA/STRINGTABLE");
         }
 
         if (stringtable.TryGetValue(key, out var fortext) == true)

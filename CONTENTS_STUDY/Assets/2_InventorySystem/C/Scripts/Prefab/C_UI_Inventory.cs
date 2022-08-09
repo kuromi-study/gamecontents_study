@@ -186,7 +186,7 @@ public class C_UI_Inventory : MonoBehaviour
             var script = item.GetComponent<C_UI_Inventory_Item>();
             if (i<listCount)
             {
-                script.SetData(C_UserInfo.Instance.itemList[i]);
+                script.SetData(C_UserInfo.Instance.itemList[i], OnClickItem);
             }
             else
             {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,9 @@ public enum eItemCategory
 }
 public class C_UI_Inventory_Item : MonoBehaviour
 {
+    [Header("버튼")]
+    [SerializeField] Button _btn;
+
     [Header("아이템 상태처리")]
     [SerializeField] GameObject _select;
     [SerializeField] GameObject _equipped;
@@ -28,6 +32,7 @@ public class C_UI_Inventory_Item : MonoBehaviour
     [SerializeField] Text _numTxt;
 
     public C_ItemInfo ItemInfo;
+    Action<C_ItemInfo> _onClick;
 
     public bool IsSelect
     {
@@ -47,13 +52,26 @@ public class C_UI_Inventory_Item : MonoBehaviour
         set => _locked.SetActive(value);
     }
 
-    public void SetData(C_Item_FBS item)
+    public void SetData(C_Item_FBS item, Action<C_ItemInfo> onClick = null)
     {
+        _onClick = onClick;
+        _btn.onClick.RemoveAllListeners();
+        _btn.onClick.AddListener(() =>
+        {
+            _onClick.Invoke(ItemInfo);
+            IsSelect = true;
+        });
+
         ItemInfo = C_ItemInfo.GetItemInfo(item.ItemUID);
 
-        var itemInfoConvert = ItemInfo as ItemInfoEquip;
+        SetData(ItemInfo);
+    }
 
-        _itemImg.sprite = Resources.Load<Sprite>(ItemInfo.ImagePath);
+    public void SetData(C_ItemInfo item)
+    {
+        var itemInfoConvert = item as ItemInfoEquip;
+
+        _itemImg.sprite = Resources.Load<Sprite>(item.ImagePath);
 
         _gradeTxt.text = itemInfoConvert.Grade.ToString();
         _enhanceTxt.text = itemInfoConvert.Enhance.ToString();
@@ -74,13 +92,6 @@ public class C_UI_Inventory_Item : MonoBehaviour
         IsSelect = false;
         IsEquip = itemInfoConvert.isEquip;
         IsLock = itemInfoConvert.isLock;
-    }
-
-    public void SetData(C_ItemInfo item)
-    {
-        var newInfo = C_ItemInfo.GetItemInfo(item.ItemUID);
-
-        _gradeTxt.text = newInfo.Grade.ToString();
     }
 
     public void SetEmpty()
