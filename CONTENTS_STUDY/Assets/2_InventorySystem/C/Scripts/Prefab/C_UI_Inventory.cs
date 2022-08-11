@@ -14,11 +14,26 @@ public enum eToggleType_C
     PORTION,
 }
 
+public enum eToggleMiddleType_C
+{
+    INFO,
+    ENHANCE,
+    GRADEUP,
+    COMPOSE
+}
+
 [Serializable]
 public class C_ToggleTab
 {
     public Toggle _toggle;
     public eToggleType_C _type;
+}
+
+[Serializable]
+public class C_ToggleTabMiddle
+{
+    public Toggle _toggle;
+    public eToggleMiddleType_C _type;
 }
 
 public class C_UI_Inventory : MonoBehaviour
@@ -29,14 +44,20 @@ public class C_UI_Inventory : MonoBehaviour
     [SerializeField] Text _currencyTxt;
 
     [Header("좌측_인벤토리영역")]
-    [SerializeField] List<C_ToggleTab> _toggleList;
+    [SerializeField] List<C_ToggleTab> _toggleInvenList;
     [SerializeField] GameObject _scrollContent;
     [SerializeField] GameObject _itemPrefab;
     [SerializeField] Text _numTxt;
     [SerializeField] Button _abandonBtn;
 
     [Header("중앙_아이템관련페이지")]
+    [SerializeField] List<C_ToggleTabMiddle> _toggleMiddleList;
     [SerializeField] C_UI_Inventory_InfoPage _infoPage;
+    [SerializeField] C_UI_Inventory_EnhancePage _enhancePage;
+    [SerializeField] C_UI_Inventory_GradeUpPage _gradePage;
+    [SerializeField] C_UI_Inventory_ComposePage _composePage;
+
+    C_UI_Inventory_Item _beforeItem;
 
     readonly int LIST_MAX_COUNT = 300;
 
@@ -70,6 +91,7 @@ public class C_UI_Inventory : MonoBehaviour
         RefreshCurrency();
 
         InitInventoryTab();
+        InitMiddleTab();
         RefreshNumText();
 
         SetBtnListner();
@@ -113,13 +135,13 @@ public class C_UI_Inventory : MonoBehaviour
     /// </summary>
     private void InitInventoryTab()
     {
-        foreach(var it in _toggleList)
+        foreach(var it in _toggleInvenList)
         {
             it._toggle.onValueChanged.RemoveAllListeners();
             it._toggle.onValueChanged.AddListener(RefreshInventoryList);
         }
 
-        var toggleClass = _toggleList.Where(x => x._type == eToggleType_C.ALL).FirstOrDefault();
+        var toggleClass = _toggleInvenList.Where(x => x._type == eToggleType_C.ALL).FirstOrDefault();
         if (toggleClass == null)
         {
             Debug.LogError("toggle List is null");
@@ -141,7 +163,7 @@ public class C_UI_Inventory : MonoBehaviour
     /// </summary>
     private void RefreshInventoryList(bool set)
     {
-        var toggleClass = _toggleList.Where(x => x._toggle.isOn == true).FirstOrDefault();
+        var toggleClass = _toggleInvenList.Where(x => x._toggle.isOn == true).FirstOrDefault();
         var type = toggleClass._type;
 
         switch(type)
@@ -287,6 +309,51 @@ public class C_UI_Inventory : MonoBehaviour
         }
     }
 
+
+
+    private void InitMiddleTab()
+    {
+        foreach (var it in _toggleMiddleList)
+        {
+            it._toggle.onValueChanged.RemoveAllListeners();
+            it._toggle.onValueChanged.AddListener(RefreshMiddlePage);
+        }
+
+        SetFirstMiddleTab();
+    }
+
+    private void SetFirstMiddleTab()
+    {
+        var toggleClass = _toggleMiddleList.Where(x => x._type == eToggleMiddleType_C.INFO).FirstOrDefault();
+        if (toggleClass == null)
+        {
+            Debug.LogError("toggle List is null");
+            return;
+        }
+
+        var toggle = toggleClass._toggle;
+        if (toggle == null)
+        {
+            Debug.LogError("toggle is null");
+            return;
+        }
+
+        toggle.isOn = true;
+    }
+
+    private void RefreshMiddlePage(bool set)
+    {
+        var toggleClass = _toggleMiddleList.Where(x => x._toggle.isOn == true).FirstOrDefault();
+        var type = toggleClass._type;
+
+        _infoPage.gameObject.SetActive(type == eToggleMiddleType_C.INFO);
+        _enhancePage.gameObject.SetActive(type == eToggleMiddleType_C.ENHANCE);
+        _gradePage.gameObject.SetActive(type == eToggleMiddleType_C.GRADEUP);
+        _composePage.gameObject.SetActive(type == eToggleMiddleType_C.COMPOSE);
+
+        Debug.Log($"{type} is On");
+    }
+
     /// <summary>
     /// 인벤토리 아이템 갯수 갱신
     /// </summary>
@@ -304,17 +371,27 @@ public class C_UI_Inventory : MonoBehaviour
         // 아이템 삭제처리
     }
 
-    public void OnClickItem(C_ItemInfo iteminfo)
+    public void OnClickItem(C_UI_Inventory_Item item)
     {
         // 처음 눌린아이템이면
+        if(item != _beforeItem)
         {
             // 정보페이지로 변경
-
+            SetFirstMiddleTab();
             // 정보페이지 갱신
-            _infoPage.InitItemInfoPage(iteminfo);
+            _infoPage.InitItemInfoPage(item.ItemInfo);
+
+            if(_beforeItem != null)
+            {
+                _beforeItem.IsSelect = false;
+            }
+            _beforeItem = item;
         }
-        // 기존에 눌렸던 아이템이면
-        // 별도처리 하지 않는다.
+        else
+        {
+            // 기존에 눌렸던 아이템이면
+            // 별도처리 하지 않는다.
+        }
     }
     #endregion
 }

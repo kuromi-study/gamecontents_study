@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ public class C_UI_Inventory_Item : MonoBehaviour
     [SerializeField] Text _numTxt;
 
     public C_ItemInfo ItemInfo;
-    Action<C_ItemInfo> _onClick;
+    Action<C_UI_Inventory_Item> _onClick;
 
     public bool IsSelect
     {
@@ -52,14 +53,16 @@ public class C_UI_Inventory_Item : MonoBehaviour
         set => _locked.SetActive(value);
     }
 
-    public void SetData(C_Item_FBS item, Action<C_ItemInfo> onClick = null)
+    public void SetData(C_Item_FBS item, Action<C_UI_Inventory_Item> onClick = null)
     {
         _onClick = onClick;
         _btn.onClick.RemoveAllListeners();
         _btn.onClick.AddListener(() =>
         {
-            _onClick.Invoke(ItemInfo);
+            _onClick.Invoke(this);
             IsSelect = true;
+            this.transform.DOPunchScale(Vector3.one * 0.2f, 0.2f, 2, 0.2f)
+            .OnComplete(() => this.transform.localScale = Vector3.one);
         });
 
         ItemInfo = C_ItemInfo.GetItemInfo(item.ItemUID);
