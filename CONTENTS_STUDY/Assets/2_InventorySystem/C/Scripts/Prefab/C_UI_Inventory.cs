@@ -351,6 +351,22 @@ public class C_UI_Inventory : MonoBehaviour
         _gradePage.gameObject.SetActive(type == eToggleMiddleType_C.GRADEUP);
         _composePage.gameObject.SetActive(type == eToggleMiddleType_C.COMPOSE);
 
+        switch(type)
+        {
+            case eToggleMiddleType_C.INFO:
+                _infoPage.InitItemInfoPage(_beforeItem.ItemInfo);
+                break;
+            case eToggleMiddleType_C.ENHANCE:
+                _enhancePage.InitItemInfoPage(_beforeItem.ItemInfo);
+                break;
+            case eToggleMiddleType_C.GRADEUP:
+                _gradePage.InitItemInfoPage(_beforeItem.ItemInfo);
+                break;
+            case eToggleMiddleType_C.COMPOSE:
+                _composePage.InitItemInfoPage(_beforeItem.ItemInfo);
+                break;
+        }
+
         Debug.Log($"{type} is On");
     }
 
@@ -360,7 +376,8 @@ public class C_UI_Inventory : MonoBehaviour
     private void RefreshNumText()
     {
         // 스트링을 가져와서 갈아끼워야한다.
-        _numTxt.text = C_UserInfo.Instance.itemList.Count.ToString();
+        var temp = A_StringManager.Instance.GetString("ui_inventory_001");
+        _numTxt.text = string.Format(temp, C_UserInfo.Instance.itemList.Count, 300);
     }
 
     /// <summary>

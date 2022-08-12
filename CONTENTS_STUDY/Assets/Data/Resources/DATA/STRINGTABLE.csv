@@ -145,7 +145,7 @@ grade_name_003,유니크
 grade_name_004,에픽
 grade_name_005,레전드
 ui_title_001,인벤토리
-ui_inventory_001 ,{0} / {1}
+ui_inventory_001,{0} / {1}
 ui_inventory_002,버리기
 ui_inventory_003,공격력 : {0}
 ui_inventory_004,방어력 : {0}
