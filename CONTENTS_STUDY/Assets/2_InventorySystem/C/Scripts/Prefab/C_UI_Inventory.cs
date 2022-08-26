@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -56,6 +57,10 @@ public class C_UI_Inventory : MonoBehaviour
     [SerializeField] C_UI_Inventory_EnhancePage _enhancePage;
     [SerializeField] C_UI_Inventory_GradeUpPage _gradePage;
     [SerializeField] C_UI_Inventory_ComposePage _composePage;
+
+    [Header("발표용")]
+    [SerializeField] C_UI_Inventory_Item _tempItem;
+    Sequence sq;
 
     C_UI_Inventory_Item _beforeItem;
 
@@ -386,6 +391,20 @@ public class C_UI_Inventory : MonoBehaviour
     private void OnClickAbandon()
     {
         // 아이템 삭제처리
+        sq.Kill();
+        sq = DOTween.Sequence()
+            .AppendCallback(
+            () =>
+            {
+                _tempItem.gameObject.SetActive(true);
+                _tempItem.transform.position = _beforeItem.transform.position;
+                _tempItem.SetData(_beforeItem.ItemInfo);
+            })
+            .Join(_tempItem.transform.DOMove(_abandonBtn.transform.position, 0.3f))
+            .OnComplete(() =>
+            {
+                _tempItem.gameObject.SetActive(false);
+            });
     }
 
     public void OnClickItem(C_UI_Inventory_Item item)

@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Item
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 61d9d0deedc002c4f80a20482ade2a3f, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 305ed47037bf72f46868c9ef293d20e2, type: 3}
+  - {fileID: 21300000, guid: 7e711e4113d2a0f4c805c6810d4af6af, type: 3}
+  - {fileID: 21300000, guid: 0bc025d183182ea448d4b8579c35375d, type: 3}
+  - {fileID: 21300000, guid: 1fa58c0216ab38d4d98a270812c93e96, type: 3}
+  - {fileID: 21300000, guid: a1e27552c6ce4e44ea1f844564395f7d, type: 3}
+  - {fileID: 21300000, guid: 0a6d39f2e9ebd5c459d35190054af31b, type: 3}
+  - {fileID: 21300000, guid: b6a7a34339dc23b4da3dacb8103f8b00, type: 3}
+  - {fileID: 21300000, guid: e916dfb38fede5445aa9aeca45775aaf, type: 3}
+  - {fileID: 21300000, guid: cf6731348303db346a7e9e9dff05b037, type: 3}
+  - {fileID: 21300000, guid: 6b93a654e8f14354997d8c23091d31eb, type: 3}
+  - {fileID: 21300000, guid: 2e87ae7463b7b3d40b7719ad87da5a2b, type: 3}
+  - {fileID: 21300000, guid: 95da77d4049651f4dbce292d3a2ca0e7, type: 3}
+  - {fileID: 21300000, guid: ea736a25bf4aef04c930c9001ee762f1, type: 3}
+  - {fileID: 21300000, guid: 1d6cd275de3a51049b0de27f102c1b6f, type: 3}
+  - {fileID: 21300000, guid: 793ecbd541221404b9f65659625150cb, type: 3}
+  - {fileID: 21300000, guid: 63314156ea9dac74992a4cb7f1df542c, type: 3}
+  - {fileID: 21300000, guid: eac2968650edaa84c94dc3d2182007b0, type: 3}
+  - {fileID: 21300000, guid: 988e5239c78319a4bbbc991a4340a2d6, type: 3}
+  - {fileID: 21300000, guid: a4c5cf798f1566a449d2ec1016eb4c55, type: 3}
+  - {fileID: 21300000, guid: 17cdab7a1572345418ee7378eab5686e, type: 3}
+  - {fileID: 21300000, guid: 898ee1da63cc191498f974e6670dae7a, type: 3}
+  - {fileID: 21300000, guid: ba877c0b299608f42b433faa583f671d, type: 3}
+  - {fileID: 21300000, guid: 80a0553bcb8740c408ee217903f94b69, type: 3}
+  - {fileID: 21300000, guid: fdebe24bccc3c3c43a1c069a3ea19e36, type: 3}
+  - {fileID: 21300000, guid: 85ba795bbcb68804c8d1e540cfb14e04, type: 3}
+  - {fileID: 21300000, guid: 907c476ba0e1b7c48b61a6eb97a0a239, type: 3}
+  - {fileID: 21300000, guid: ff53476c3c56b354e8d212cde4a70630, type: 3}
+  - {fileID: 21300000, guid: 80d2fbbcfb9fd8d41a4aa4641158c8b4, type: 3}
+  - {fileID: 21300000, guid: 348a696dfe0237d4bb163dabe95f3399, type: 3}
+  - {fileID: 21300000, guid: 44faf3edccc34a540bca81f8d1e1c888, type: 3}
+  - {fileID: 21300000, guid: a21a1dede740cdb4ca803a6dc666583b, type: 3}
+  - {fileID: 21300000, guid: 65b6182ecb8dd3a4bb28777b109e22c1, type: 3}
+  - {fileID: 21300000, guid: b83e37ce76b2bb64b8dac7fd54e2845c, type: 3}
+  - {fileID: 21300000, guid: 33cf96deeb43fbc45ab9772394660141, type: 3}
+  - {fileID: 21300000, guid: 237e17deba2702547864d851517920d7, type: 3}
+  - {fileID: 21300000, guid: 5b70c1fe6ba178048b59a5035221507f, type: 3}
+  - {fileID: 21300000, guid: 5cefc03f448e6ee4cbae8eb35b80bfdc, type: 3}
+  - {fileID: 21300000, guid: 0e682a4fea6fb6d4e81c94a5ce69dafb, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - accessories_img_0012
+  - accessories_img_0001
+  - equip_img_0005
+  - equip_img_0004
+  - accessories_img_0015
+  - equip_img_0001
+  - accessories_img_0007
+  - accessories_img_0013
+  - accessories_img_0011
+  - equip_img_0012
+  - accessories_img_0004
+  - equip_img_0009
+  - equip_img_0003
+  - accessories_img_0006
+  - equip_img_0010
+  - accessories_img_0002
+  - portion_img_0002
+  - equip_img_0015
+  - STAR
+  - accessories_img_0010
+  - equip_img_0007
+  - accessories_img_0008
+  - equip_img_0006
+  - accessories_img_0003
+  - portion_img_0004
+  - portion_img_0005
+  - Frame
+  - portion_img_0003
+  - equip_img_0002
+  - portion_img_0001
+  - equip_img_0008
+  - accessories_img_0014
+  - accessories_img_0005
+  - accessories_img_0009
+  - EQUIPPED
+  - equip_img_0011
+  - equip_img_0014
+  - equip_img_0013
+  m_RenderDataMap: {}
+  m_Tag: Item
+  m_IsVariant: 0

@@ -74,7 +74,8 @@ public class C_UI_Inventory_Item : MonoBehaviour
     {
         var itemInfoConvert = item as ItemInfoEquip;
 
-        _itemImg.sprite = Resources.Load<Sprite>(item.ImagePath);
+        var path = item.ImagePath.Replace("Sprite/INVENTORY/", "");
+        _itemImg.sprite = C_ResourceManager.Instance.GetSprite(path);//Resources.Load<Sprite>(item.ImagePath);
 
         _gradeTxt.text = itemInfoConvert.Grade.ToString();
         _enhanceTxt.text = itemInfoConvert.Enhance.ToString();
