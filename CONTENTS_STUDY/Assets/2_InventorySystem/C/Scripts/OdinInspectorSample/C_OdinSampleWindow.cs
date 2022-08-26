@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class C_OdinSampleWindwo : OdinMenuEditorWindow
 {
-    [MenuItem("My Game/My Editor")]
+    [MenuItem("Tools/InventoryStudy")]
     private static void OpenWindow()
     {
         GetWindow<C_OdinSampleWindwo>().Show();
@@ -19,7 +19,7 @@ public class C_OdinSampleWindwo : OdinMenuEditorWindow
         var tree = new OdinMenuTree();
         tree.Selection.SupportsMultiSelect = false;
 
-        tree.Add("Utilities", new TextureUtilityEditor());
+        tree.Add("인벤토리툴", new TextureUtilityEditor());
         return tree;
     }
 }
@@ -31,21 +31,21 @@ public class TextureUtilityEditor
 
     [TitleGroup("ItemTab", Order = 2, HorizontalLine = true)]
     [HorizontalGroup("ItemTab/TabGroup")]
-    [Button]
+    [Button("장비")]
     public void SetListA()
     {
         SelectTab(1);
     }
 
     [HorizontalGroup("ItemTab/TabGroup")]
-    [Button]
+    [Button("악세사리")]
     public void SetListB()
     {
         SelectTab(1001);
     }
 
     [HorizontalGroup("ItemTab/TabGroup")]
-    [Button]
+    [Button("소모품")]
     public void SetListC()
     {
         SelectTab(2001);
