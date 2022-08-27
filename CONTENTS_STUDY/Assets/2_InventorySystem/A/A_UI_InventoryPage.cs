@@ -25,7 +25,7 @@ public class A_UI_InventoryPage : MonoBehaviour
 
     public void InventoryOpen()
     {
-        // ¹öÆ° ÅØ½ºÆ®
+        // ë²„íŠ¼ í…ìŠ¤íŠ¸
         backBtnTXT.text = D_StringkeyManager.Instance.GetString("ui_pass_001");
         titleTXT.text = D_StringkeyManager.Instance.GetString("ui_title_001");
         
@@ -34,7 +34,7 @@ public class A_UI_InventoryPage : MonoBehaviour
 
     private void UpdateCash(float amount)
     {
-        // °ñµåÇ¥ÇöÀº ±¹Á¦Ç¥±â¿¡ ¸Â°Ô °£¼ÒÈ­µÈ ÇüÅÂ¸¦ »ç¿ëÇÑ´Ù. Â©¸° ¼ıÀÚ´Â ¹ö¸²(Floor) Ã³¸®ÇÑ´Ù.
+        // ê³¨ë“œí‘œí˜„ì€ êµ­ì œí‘œê¸°ì— ë§ê²Œ ê°„ì†Œí™”ëœ í˜•íƒœë¥¼ ì‚¬ìš©í•œë‹¤. ì§¤ë¦° ìˆ«ìëŠ” ë²„ë¦¼(Floor) ì²˜ë¦¬í•œë‹¤.
 
         cashAmount = Mathf.RoundToInt(cashAmount+amount);
         cashTXT.text = cashAmount.ToString();
@@ -76,7 +76,7 @@ public class A_UI_InventoryPage : MonoBehaviour
 
     public void SetActiveTab(Text text_, Color color_)
     {
-        // ÅØ½ºÆ® »ö º¯È­
+        // í…ìŠ¤íŠ¸ ìƒ‰ ë³€í™”
         text_.color = color_;
     }
 
