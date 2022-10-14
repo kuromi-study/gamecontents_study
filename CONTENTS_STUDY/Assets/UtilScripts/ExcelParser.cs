@@ -15,7 +15,7 @@ public class ExcelParser
     {
         var list = new Dictionary<string, Dictionary<string, object>>();
         TextAsset data = Resources.Load(file) as TextAsset;
-
+        
         var lines = Regex.Split(data.text, LINE_SPLIT_RE);
 
         if (lines.Length <= 1) return list;

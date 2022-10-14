@@ -227,7 +227,6 @@ public class PassManager : MonoSingleton<PassManager>
                     rewardItemList[i].InitData(passRewardData[idx]);
                     idx++;
                     rewardItemActions.Add(rewardItemList[i].ReceiveAll);
-                    Debug.Log("1");
                 }
                 else
                 {
@@ -236,7 +235,6 @@ public class PassManager : MonoSingleton<PassManager>
                     lastReward.InitData(passRewardData[idx]);
                     idx++;
                     rewardItemActions.Add(lastReward.ReceiveAll);
-                    Debug.Log("2");
                 }
             }
             else
@@ -267,6 +265,7 @@ public class PassManager : MonoSingleton<PassManager>
         var data = ExcelParser.Read("PASS_TABLE-PASSMAIN");
         foreach (var item in data)
         {
+            Debug.Log(item.Value["STARTDATE"].ToString());
             startTime = DateTime.ParseExact(item.Value["STARTDATE"].ToString(), "yyyyMMddHHmmss",
                 null);
             endTime = DateTime.ParseExact(item.Value["ENDDATE"].ToString(), "yyyyMMddHHmmss",
@@ -275,6 +274,7 @@ public class PassManager : MonoSingleton<PassManager>
             {
                 foundSeason = true;
                 season = Int32.Parse(item.Value["ID"].ToString());
+                Debug.Log($"found season : {season}");
                 SetCurrentSeasonRewardData(season);
                 break;
             }
@@ -314,19 +314,19 @@ public class PassManager : MonoSingleton<PassManager>
             remainTimeSpan = endTime.Subtract(DateTime.Now);
             if (remainTimeSpan.Days > 0)
             {
-                timerText.text = $"{remainTimeSpan.Days}D ����";
+                timerText.text = $"{remainTimeSpan.Days}D 남음";
             }
             else if (remainTimeSpan.Hours > 0)
             {
-                timerText.text = $"{remainTimeSpan.Hours}H ����";
+                timerText.text = $"{remainTimeSpan.Hours}H 남음";
             }
             else if (remainTimeSpan.Minutes > 0)
             {
-                timerText.text = $"{remainTimeSpan.Minutes}M ����";
+                timerText.text = $"{remainTimeSpan.Minutes}M 남음";
             }
             else if (remainTimeSpan.Seconds > 0)
             {
-                timerText.text = $"{remainTimeSpan.Seconds}S ����";
+                timerText.text = $"{remainTimeSpan.Seconds}S 남음";
             }
             else
             {
