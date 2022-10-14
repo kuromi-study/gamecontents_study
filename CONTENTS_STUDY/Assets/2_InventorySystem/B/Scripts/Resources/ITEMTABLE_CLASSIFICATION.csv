@@ -1,0 +1,13 @@
+string,string,#
+ID,NAME,SAMPLE
+1,classification_name_0001,장비
+2,classification_name_0002,투구
+3,classification_name_0003,갑옷
+4,classification_name_0004,신발
+1001,classification_name_0005,악세사리
+1002,classification_name_0006,목걸이
+1003,classification_name_0007,반지
+1004,classification_name_0008,허리띠
+2001,classification_name_0009,소모품
+2002,classification_name_0009,포션
+2003,classification_name_0009,강화석

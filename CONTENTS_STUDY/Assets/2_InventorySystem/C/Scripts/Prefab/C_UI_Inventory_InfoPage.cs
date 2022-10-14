@@ -6,14 +6,14 @@ using UnityEngine.UI.Extensions;
 
 public class C_UI_Inventory_InfoPage : MonoBehaviour
 {
-    [Header("»ó´Ü")]
+    [Header("ìƒë‹¨")]
     [SerializeField] Button _lockBtn;
     [SerializeField] C_UI_Inventory_Item _item;
     [SerializeField] Text _category01Txt;
     [SerializeField] Text _category02Txt;
     [SerializeField] Text _gradeTxt;
 
-    [Header("ÇÏ´Ü")]
+    [Header("í•˜ë‹¨")]
     [SerializeField] Text _nameTxt;
     [SerializeField] Text _desTxt;
     [SerializeField] Text _abiltiyTxt;
@@ -57,12 +57,12 @@ public class C_UI_Inventory_InfoPage : MonoBehaviour
     {
         if(_iteminfo.isLock == true)
         {
-            // ÇØÁ¦ Ã³¸®¸¦ ¼öÇàÇÑ´Ù.
+            // í•´ì œ ì²˜ë¦¬ë¥¼ ìˆ˜í–‰í•œë‹¤.
 
         }
         else
         {
-            // Àá±İ Ã³¸®¸¦ ¼öÇàÇÑ´Ù.
+            // ì ê¸ˆ ì²˜ë¦¬ë¥¼ ìˆ˜í–‰í•œë‹¤.
 
         }
     }
@@ -71,12 +71,12 @@ public class C_UI_Inventory_InfoPage : MonoBehaviour
     {
         if(_iteminfo.isEquip == true)
         {
-            // ÇØÁ¦ Ã³¸®¸¦ ¼öÇàÇÑ´Ù.
+            // í•´ì œ ì²˜ë¦¬ë¥¼ ìˆ˜í–‰í•œë‹¤.
 
         }
         else
         {
-            // ÀåÂø Ã³¸®¸¦ ¼öÇàÇÑ´Ù.
+            // ì¥ì°© ì²˜ë¦¬ë¥¼ ìˆ˜í–‰í•œë‹¤.
 
         }
     }

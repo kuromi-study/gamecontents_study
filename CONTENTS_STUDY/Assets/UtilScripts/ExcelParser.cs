@@ -15,7 +15,7 @@ public class ExcelParser
     {
         var list = new Dictionary<string, Dictionary<string, object>>();
         TextAsset data = Resources.Load(file) as TextAsset;
-
+        
         var lines = Regex.Split(data.text, LINE_SPLIT_RE);
 
         if (lines.Length <= 1) return list;
@@ -61,6 +61,8 @@ public class ExcelParser
                         }
                         break;
                     case "#":
+                        finalvalue = value;
+                        break;
                         // 그냥 주석용 컬럼임으로 아무런 처리도 하ㅣ않음.
                         continue;
                 }
@@ -70,7 +72,7 @@ public class ExcelParser
 
             if (list.ContainsKey(values[0]) == true)
             {
-                Debug.Log("ERROR!!!!!");
+                //Debug.Log("ERROR!!!!!");
                 continue;
             }
             else
